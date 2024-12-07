@@ -440,45 +440,57 @@
             try {
                 // Use the real data and recommendation engine
                 const recommendations = window.getRecommendations(formData);
-                console.log('Recommendations:', recommendations); // Debug log
+                console.log('Raw Recommendations:', recommendations); // Debug log
 
-                // Convert to display format
                 return recommendations.map(provider => {
                     try {
+                        // Determine plan type
                         const planType = formData.planType === 'any' ?
                             (provider.plans.postpaid ? 'postpaid' : 'prepaid') :
                             formData.planType;
 
+                        // Get the plans for the selected type
                         const plans = provider.plans[planType];
                         if (!plans || plans.length === 0) {
+                            console.log('No plans found for', provider.name);
                             return null;
                         }
 
-                        const cheapestPlan = plans[0];
+                        // Get the first plan of the selected type
+                        const selectedPlan = plans[0];
+
                         return {
-                            provider: provider.name,
-                            planName: cheapestPlan.name,
-                            price: cheapestPlan.price,
-                            data: cheapestPlan.data,
-                            features: cheapestPlan.features,
+                            ...provider, // Keep all provider properties
+                            selectedPlan: selectedPlan, // Add the selected plan
                             recommendation: provider.score > 5 ? "Best Match" :
-                                provider.score > 3 ? "Great Value" : "Good Option",
-                            network: provider.network.name
+                                provider.score > 3 ? "Great Value" : "Good Option"
                         };
                     } catch (error) {
                         console.error('Error processing provider:', provider, error);
                         return null;
                     }
-                })
-                    .filter(Boolean) // Remove null entries
+                }).filter(Boolean) // Remove null entries
                     .slice(0, 5); // Show top 5 recommendations
             } catch (error) {
                 console.error('Error getting recommendations:', error);
                 return []; // Return empty array if there's an error
             }
         }
+        // Add this helper function near the top of your script section
+        function getInsightBackgroundColor(type) {
+            switch (type) {
+                case 'warning':
+                    return 'bg-amber-50';
+                case 'benefit':
+                    return 'bg-green-50';
+                case 'tip':
+                    return 'bg-blue-50';
+                default:
+                    return 'bg-gray-50';
+            }
+        }
 
-        // Function to display recommendations
+
         function displayRecommendations(recommendations) {
             const container = document.getElementById('recommendationsList');
 
@@ -491,39 +503,72 @@
                 return;
             }
 
-            container.innerHTML = recommendations.map((plan, index) => `
-        <div class="bg-white rounded-lg border-2 ${index === 0 ? 'border-blue-500' : 'border-gray-200'} p-6">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h3 class="text-xl font-semibold">${plan.provider}</h3>
-                    <p class="text-gray-600">${plan.planName}</p>
-                    <p class="text-sm text-gray-500">Network: ${plan.network}</p>
-                </div>
-                ${index === 0 ? '<span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">' + plan.recommendation + '</span>' : ''}
+            container.innerHTML = recommendations.map((plan, index) => {
+                // Get insights for this plan
+                const insights = window.getPlanInsights(plan, formData);
+
+                // Generate insights HTML
+                const insightsHTML = insights.map(insight => `
+            <div class="flex items-start space-x-2 p-3 ${getInsightBackgroundColor(insight.type)} rounded-lg mb-2">
+                <span class="text-lg">${insight.icon}</span>
+                <p class="text-sm text-gray-700">${insight.message}</p>
             </div>
-            <div class="flex items-baseline mb-4">
-                <span class="text-3xl font-bold">$${plan.price}</span>
-                <span class="text-gray-600 ml-1">/month</span>
-            </div>
-            <div class="mb-4">
-                <p class="font-medium">Data: ${plan.data}</p>
-            </div>
-            <div class="space-y-2">
-                ${plan.features.map(feature => `
-                    <div class="flex items-center text-sm text-gray-600">
-                        <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        ${feature}
+        `).join('');
+
+                return `
+            <div class="bg-white rounded-lg border-2 ${index === 0 ? 'border-blue-500' : 'border-gray-200'} p-6">
+                <!-- Plan Header -->
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold">${plan.name}</h3>
+                        <p class="text-gray-600">${plan.selectedPlan.name}</p>
+                        <p class="text-sm text-gray-500">Network: ${plan.network.name}</p>
                     </div>
-                `).join('')}
+                    ${index === 0 ?
+                        `<span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                            ${plan.recommendation}
+                        </span>` : ''}
+                </div>
+                
+                <!-- Price -->
+                <div class="flex items-baseline mb-4">
+                    <span class="text-3xl font-bold">$${plan.selectedPlan.price}</span>
+                    <span class="text-gray-600 ml-1">/month</span>
+                </div>
+                
+                <!-- Data -->
+                <div class="mb-4">
+                    <p class="font-medium">Data: ${plan.selectedPlan.data}</p>
+                </div>
+
+                <!-- Features -->
+                <div class="space-y-2 mb-4">
+                    ${plan.selectedPlan.features.map(feature => `
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            ${feature}
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Insights Section -->
+                <div class="mt-4 space-y-2">
+                    <h4 class="font-medium text-gray-900 mb-2">Plan Insights</h4>
+                    ${insightsHTML}
+                </div>
+
+                <!-- Action Button -->
+                <button class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Select Plan
+                </button>
             </div>
-            <button class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                Select Plan
-            </button>
-        </div>
-    `).join('');
+        `;
+            }).join('');
         }
+
+
         // Add some CSS for the progress indicators
         const style = document.createElement('style');
         style.textContent = `

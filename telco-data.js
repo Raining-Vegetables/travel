@@ -466,6 +466,80 @@ function getRecommendations(userProfile) {
     return matchedProviders.sort((a, b) => b.score - a.score);
 }
 
+// Add this function before the final window assignments
+function getPlanInsights(plan, userProfile) {
+    const insights = [];
+
+    // Network Quality Insights
+    if (plan.network.name === "Telstra") {
+        insights.push({
+            type: "benefit",
+            icon: "✓",
+            message: "Best network coverage in Sydney - ideal for reliable connectivity"
+        });
+
+        if (userProfile.location === "western" || userProfile.location === "southern") {
+            insights.push({
+                type: "benefit",
+                icon: "✓",
+                message: "Superior coverage in outer Sydney areas"
+            });
+        }
+    }
+
+    // Data and Plan Type Insights
+    if (userProfile.dataNeeds === "heavy") {
+        const planType = userProfile.planType === 'any' ?
+            (plan.plans.postpaid ? 'postpaid' : 'prepaid') :
+            userProfile.planType;
+
+        const selectedPlan = plan.plans[planType][0];
+
+        if (selectedPlan.data !== "Unlimited") {
+            insights.push({
+                type: "warning",
+                icon: "⚠",
+                message: "For heavy data users, consider unlimited plans to avoid excess charges"
+            });
+        }
+    }
+
+    // Provider-specific insights
+    switch (plan.name) {
+        case "Optus":
+            insights.push({
+                type: "tip",
+                icon: "💡",
+                message: "CBA customers get up to 20% off through CommBank Rewards"
+            });
+            break;
+
+        case "Telstra":
+            if (plan.specialFeatures.includes("Entertainment Extras")) {
+                insights.push({
+                    type: "tip",
+                    icon: "💡",
+                    message: "Includes Foxtel Now + free sports streaming"
+                });
+            }
+            break;
+    }
+
+    // Stay duration insights
+    if (userProfile.stayDuration === "short" && !plan.name.toLowerCase().includes("prepaid")) {
+        insights.push({
+            type: "warning",
+            icon: "⚠",
+            message: "Short-term visitors should consider prepaid plans"
+        });
+    }
+
+    return insights;
+}
+
+// Add this line with the other window assignments at the bottom
+window.getPlanInsights = getPlanInsights;
+
 // Make these available to other files
 window.networkProviders = networkProviders;
 window.providers = providers;
