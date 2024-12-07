@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Perfect Plan - Sydney Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="telco-data.js"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold text-blue-600">SydneyMobile</div>
+                <button onclick="window.history.back()"
+                    class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto py-8 px-4">
+        <div class="max-w-3xl mx-auto">
+            <!-- Progress Steps -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center">
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <div class="step-circle active">1</div>
+                            <div class="flex-1 h-1 bg-gray-200 mx-2">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm mt-2 text-center">About You</p>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <div class="step-circle">2</div>
+                            <div class="flex-1 h-1 bg-gray-200 mx-2">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm mt-2 text-center">Usage Needs</p>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <div class="step-circle">3</div>
+                            <div class="flex-1 h-1 bg-gray-200 mx-2">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm mt-2 text-center">Features</p>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <div class="step-circle">4</div>
+                        </div>
+                        <p class="text-sm mt-2 text-center">Results</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <!-- Step 1: About You -->
+                <div class="step-content" id="step1">
+                    <h2 class="text-2xl font-bold mb-6">What brings you to Sydney?</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <button
+                            class="user-type-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            data-type="tourist">
+                            <h3 class="font-semibold mb-1">Tourist</h3>
+                            <p class="text-sm text-gray-600">Visiting Sydney for a short time</p>
+                        </button>
+                        <button
+                            class="user-type-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            data-type="student">
+                            <h3 class="font-semibold mb-1">Student</h3>
+                            <p class="text-sm text-gray-600">Studying in Sydney</p>
+                        </button>
+                        <button
+                            class="user-type-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            data-type="business">
+                            <h3 class="font-semibold mb-1">Business</h3>
+                            <p class="text-sm text-gray-600">Here for work</p>
+                        </button>
+                        <button
+                            class="user-type-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            data-type="resident">
+                            <h3 class="font-semibold mb-1">Resident</h3>
+                            <p class="text-sm text-gray-600">Living in Sydney</p>
+                        </button>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">How long are you staying?</label>
+                        <select id="stayDuration"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select duration</option>
+                            <option value="short">Less than 1 month</option>
+                            <option value="medium">1-3 months</option>
+                            <option value="long">3+ months</option>
+                            <option value="permanent">Permanent</option>
+                        </select>
+                    </div>
+
+                    <button id="nextStep1"
+                        class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300"
+                        disabled>
+                        Next: Usage Needs
+                    </button>
+                </div>
+
+                <!-- Step 2: Usage Needs -->
+                <div class="step-content hidden" id="step2">
+                    <h2 class="text-2xl font-bold mb-6">Tell us about your usage needs</h2>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Budget (AUD)</label>
+                        <input type="number" id="budget"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter amount">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Plan Type Preference</label>
+                        <div class="space-y-2">
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="planType" value="any" class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">No preference</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="planType" value="prepaid" class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">Prepaid</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="radio" name="planType" value="postpaid" class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">Postpaid</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Data Usage</label>
+                        <select id="dataNeeds"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select data needs</option>
+                            <option value="light">Light (0-30GB)</option>
+                            <option value="medium">Medium (30-100GB)</option>
+                            <option value="heavy">Heavy (100GB+)</option>
+                            <option value="unlimited">Unlimited</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="prevStep()"
+                            class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                            Back
+                        </button>
+                        <button id="nextStep2"
+                            class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300"
+                            disabled>
+                            Next: Features
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Features -->
+                <div class="step-content hidden" id="step3">
+                    <h2 class="text-2xl font-bold mb-6">Additional Features</h2>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Where will you mainly use your
+                            phone?</label>
+                        <select id="location"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select primary location</option>
+                            <option value="cbd">Sydney CBD</option>
+                            <option value="inner">Inner Sydney</option>
+                            <option value="eastern">Eastern Suburbs</option>
+                            <option value="western">Western Sydney</option>
+                            <option value="northern">Northern Suburbs</option>
+                            <option value="southern">Southern Sydney</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-4">Select the features you
+                            need:</label>
+                        <div class="space-y-3">
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="coverage" class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">Premium Coverage</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="international"
+                                    class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">International Calls/Roaming</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="entertainment"
+                                    class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">Entertainment Packages</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" name="features" value="speed" class="h-4 w-4 text-blue-600">
+                                <span class="ml-2">5G Speed</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="prevStep()"
+                            class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                            Back
+                        </button>
+                        <button id="nextStep3"
+                            class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300"
+                            disabled>
+                            Show Recommendations
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Results -->
+                <div class="step-content hidden" id="step4">
+                    <!-- Results will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentStep = 1;
+        const formData = {
+            userType: '',
+            stayDuration: '',
+            budget: '',
+            planType: '',
+            dataNeeds: '',
+            location: '',
+            features: [],
+            needs: {
+                coverage: false,
+                international: false,
+                entertainment: false,
+                speed: false
+            }
+        };
+
+        // DOM Elements
+        const userTypeBtns = document.querySelectorAll('.user-type-btn');
+        const stayDuration = document.getElementById('stayDuration');
+        const nextStep1 = document.getElementById('nextStep1');
+        const nextStep2 = document.getElementById('nextStep2');
+        const nextStep3 = document.getElementById('nextStep3');
+
+        // Step 1 Validation
+        function validateStep1() {
+            const isValid = formData.userType && formData.stayDuration;
+            nextStep1.disabled = !isValid;
+        }
+
+        // User Type Selection
+        userTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active state from all buttons
+                userTypeBtns.forEach(b => b.classList.remove('border-blue-500'));
+                // Add active state to clicked button
+                btn.classList.add('border-blue-500');
+                formData.userType = btn.dataset.type;
+                validateStep1();
+            });
+        });
+
+        // Stay Duration Selection
+        stayDuration.addEventListener('change', (e) => {
+            formData.stayDuration = e.target.value;
+            validateStep1();
+        });
+
+        // Step 2 Validation
+        // Step 2 Validation
+        function validateStep2() {
+            const isValid = formData.budget && formData.planType && formData.dataNeeds;
+            nextStep2.disabled = !isValid;
+        }
+
+        // Budget Input
+        document.getElementById('budget').addEventListener('input', (e) => {
+            formData.budget = e.target.value;
+            validateStep2();
+        });
+
+        // Plan Type Selection
+        document.querySelectorAll('input[name="planType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                formData.planType = e.target.value;
+                validateStep2();
+            });
+        });
+
+        // Data Needs Selection
+        document.getElementById('dataNeeds').addEventListener('change', (e) => {
+            formData.dataNeeds = e.target.value;
+            validateStep2();
+        });
+
+        // Step 3 Validation
+        function validateStep3() {
+            const isValid = formData.location;
+            nextStep3.disabled = !isValid;
+        }
+
+        // Location Selection
+        document.getElementById('location').addEventListener('change', (e) => {
+            formData.location = e.target.value;
+            validateStep3();
+        });
+
+        // Feature Selection
+        // After feature selection in your wizard.html
+        document.querySelectorAll('input[name="features"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                if (!formData.needs) {
+                    formData.needs = {};
+                }
+                formData.needs[e.target.value] = e.target.checked;
+                console.log('Updated formData:', formData); // Debug log
+            });
+        });
+
+        // Navigation Functions
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            // Show current step
+            document.getElementById(`step${step}`).classList.remove('hidden');
+
+            // Update progress circles
+            document.querySelectorAll('.step-circle').forEach((circle, index) => {
+                if (index + 1 < step) {
+                    circle.classList.add('bg-blue-600', 'text-white');
+                } else if (index + 1 === step) {
+                    circle.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    circle.classList.remove('bg-blue-600', 'text-white');
+                }
+            });
+
+            // Update progress bars
+            document.querySelectorAll('.progress-bar').forEach((bar, index) => {
+                if (index + 1 < step) {
+                    bar.style.width = '100%';
+                    bar.classList.add('bg-blue-600');
+                } else {
+                    bar.style.width = '0%';
+                    bar.classList.remove('bg-blue-600');
+                }
+            });
+        }
+
+        function nextStep() {
+            if (currentStep < 4) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        // Add click handlers for next buttons
+        nextStep1.addEventListener('click', nextStep);
+        nextStep2.addEventListener('click', nextStep);
+        nextStep3.addEventListener('click', showResults);
+
+        // Function to show results
+        function showResults() {
+            currentStep = 4;
+            showStep(4);
+
+            // Get the results container
+            const resultsContainer = document.getElementById('step4');
+
+            // Clear previous results
+            resultsContainer.innerHTML = `
+                <h2 class="text-2xl font-bold mb-6">Recommended Plans</h2>
+                <div class="space-y-6" id="recommendationsList">
+                    <!-- Results will be populated here -->
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                        <p class="mt-4 text-gray-600">Finding the best plans for you...</p>
+                    </div>
+                </div>
+            `;
+
+            // Simulate API call with setTimeout
+            setTimeout(() => {
+                // This is where you would normally make an API call to get recommendations
+                const mockRecommendations = getMockRecommendations();
+                displayRecommendations(mockRecommendations);
+            }, 1500);
+        }
+
+        // Mock function to generate recommendations
+        function getMockRecommendations() {
+            console.log('Form Data:', formData); // Debug log
+
+            try {
+                // Use the real data and recommendation engine
+                const recommendations = window.getRecommendations(formData);
+                console.log('Recommendations:', recommendations); // Debug log
+
+                // Convert to display format
+                return recommendations.map(provider => {
+                    try {
+                        const planType = formData.planType === 'any' ?
+                            (provider.plans.postpaid ? 'postpaid' : 'prepaid') :
+                            formData.planType;
+
+                        const plans = provider.plans[planType];
+                        if (!plans || plans.length === 0) {
+                            return null;
+                        }
+
+                        const cheapestPlan = plans[0];
+                        return {
+                            provider: provider.name,
+                            planName: cheapestPlan.name,
+                            price: cheapestPlan.price,
+                            data: cheapestPlan.data,
+                            features: cheapestPlan.features,
+                            recommendation: provider.score > 5 ? "Best Match" :
+                                provider.score > 3 ? "Great Value" : "Good Option",
+                            network: provider.network.name
+                        };
+                    } catch (error) {
+                        console.error('Error processing provider:', provider, error);
+                        return null;
+                    }
+                })
+                    .filter(Boolean) // Remove null entries
+                    .slice(0, 5); // Show top 5 recommendations
+            } catch (error) {
+                console.error('Error getting recommendations:', error);
+                return []; // Return empty array if there's an error
+            }
+        }
+
+        // Function to display recommendations
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsList');
+
+            if (!recommendations || recommendations.length === 0) {
+                container.innerHTML = `
+            <div class="text-center py-8">
+                <p class="text-gray-600">No matching plans found. Try adjusting your criteria.</p>
+            </div>
+        `;
+                return;
+            }
+
+            container.innerHTML = recommendations.map((plan, index) => `
+        <div class="bg-white rounded-lg border-2 ${index === 0 ? 'border-blue-500' : 'border-gray-200'} p-6">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-semibold">${plan.provider}</h3>
+                    <p class="text-gray-600">${plan.planName}</p>
+                    <p class="text-sm text-gray-500">Network: ${plan.network}</p>
+                </div>
+                ${index === 0 ? '<span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">' + plan.recommendation + '</span>' : ''}
+            </div>
+            <div class="flex items-baseline mb-4">
+                <span class="text-3xl font-bold">$${plan.price}</span>
+                <span class="text-gray-600 ml-1">/month</span>
+            </div>
+            <div class="mb-4">
+                <p class="font-medium">Data: ${plan.data}</p>
+            </div>
+            <div class="space-y-2">
+                ${plan.features.map(feature => `
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        ${feature}
+                    </div>
+                `).join('')}
+            </div>
+            <button class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                Select Plan
+            </button>
+        </div>
+    `).join('');
+        }
+        // Add some CSS for the progress indicators
+        const style = document.createElement('style');
+        style.textContent = `
+            .step-circle {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                background: white;
+                border: 2px solid #e5e7eb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+            }
+            .progress-bar {
+                height: 100%;
+                transition: width 0.3s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
