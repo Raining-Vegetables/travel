@@ -1,4 +1,4 @@
-// Network Providers (Major Carriers)
+// MVP Provider Data
 const networkProviders = {
     telstra: {
         name: "Telstra",
@@ -6,14 +6,166 @@ const networkProviders = {
         coverage: {
             sydney: {
                 general: "Excellent",
-                cbd: "Excellent",
-                suburban: "Excellent",
-                regional: "Excellent"
+                cbd: { general: "Excellent" },
+                inner: { general: "Excellent" },
+                eastern: { general: "Excellent" },
+                western: { general: "Very Good" },
+                northern: { general: "Excellent" },
+                southern: { general: "Very Good" },
+                dead_zones: [
+                    {
+                        location: "Train Tunnels",
+                        description: "Limited coverage in underground sections"
+                    }
+                ],
+                peak_performance: {
+                    cbd: {
+                        peak_times: "8:00-9:30AM, 5:00-6:30PM",
+                        impact: "May experience slower speeds during peak hours"
+                    }
+                }
             }
         },
-        features: ["5G", "4G", "3G"],
-        speed: "Fastest available",
-        networkTier: "Premium"
+        plans: {
+            prepaid: [
+                {
+                    name: "Tourist Starter",
+                    duration: 28,
+                    data: "30GB",
+                    price: 30,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 15 countries",
+                        "4G network access"
+                    ]
+                },
+                {
+                    name: "Tourist Plus",
+                    duration: 28,
+                    data: "65GB",
+                    price: 45,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 20 countries",
+                        "5G network access"
+                    ]
+                },
+                {
+                    name: "Student Starter",
+                    duration: 28,
+                    data: "40GB",
+                    price: 30,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 15 countries",
+                        "Student bonus data"
+                    ]
+                },
+                {
+                    name: "Student Plus",
+                    duration: 28,
+                    data: "65GB",
+                    price: 45,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 20 countries",
+                        "Student bonus data",
+                        "Entertainment package included"
+                    ]
+                }
+            ],
+            postpaid: [
+                {
+                    name: "Business Essential",
+                    duration: 30,
+                    data: "120GB",
+                    price: 65,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 20 countries",
+                        "5G network access",
+                        "Priority customer support",
+                        "Business account manager",
+                        "Static IP option"
+                    ]
+                },
+                {
+                    name: "Business Premium",
+                    duration: 30,
+                    data: "300GB",
+                    price: 85,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 35 countries",
+                        "5G network access",
+                        "Priority customer support",
+                        "Business account manager",
+                        "Microsoft 365 Business Basic included",
+                        "Data sharing across plans"
+                    ]
+                },
+                {
+                    name: "Resident Value",
+                    duration: 30,
+                    data: "80GB",
+                    price: 55,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 15 countries",
+                        "5G network access",
+                        "Data banking up to 500GB"
+                    ]
+                },
+                {
+                    name: "Resident Premium",
+                    duration: 30,
+                    data: "240GB",
+                    price: 75,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 30 countries",
+                        "5G network access",
+                        "Data banking up to 1TB",
+                        "Entertainment package included"
+                    ]
+                }
+            ]
+        },
+        store_locations: {
+            cbd: [
+                {
+                    name: "Telstra Store Sydney CBD",
+                    address: "400 George Street, Sydney",
+                    hours: "Mon-Sat: 9:00-17:30",
+                    phone: "02 9XXX XXXX",
+                    google_maps: "https://maps.google.com",
+                    nearest_transport: "Town Hall Station (2 min walk)"
+                }
+            ]
+        },
+        support: {
+            tourist_hotline: "1800 XXX XXX",
+            tourist_support_hours: "24/7",
+            languages: ["English", "Mandarin", "Korean"]
+        },
+        business_support: {
+            hotline: "1800 XXX XXX",
+            support_hours: "24/7",
+            features: [
+                "Dedicated business account manager",
+                "Priority technical support",
+                "Online business portal"
+            ]
+        },
+        resident_support: {
+            hotline: "1800 XXX XXX",
+            support_hours: "24/7",
+            features: [
+                "24/7 technical support",
+                "Online account management",
+                "Local store support"
+            ]
+        }
     },
     optus: {
         name: "Optus",
@@ -21,528 +173,368 @@ const networkProviders = {
         coverage: {
             sydney: {
                 general: "Excellent",
-                cbd: "Excellent",
-                suburban: "Very Good",
-                regional: "Good"
+                cbd: { general: "Excellent" },
+                inner: { general: "Very Good" },
+                eastern: { general: "Excellent" },
+                western: { general: "Very Good" },
+                northern: { general: "Very Good" },
+                southern: { general: "Very Good" }
             }
         },
-        features: ["5G", "4G", "3G"],
-        speed: "Fast",
-        networkTier: "Premium"
-    },
-    vodafone: {
-        name: "Vodafone",
-        type: "major",
-        coverage: {
-            sydney: {
-                general: "Very Good",
-                cbd: "Excellent",
-                suburban: "Good",
-                regional: "Fair"
-            }
+        plans: {
+            prepaid: [
+                {
+                    name: "Visitor Plan",
+                    duration: 28,
+                    data: "25GB",
+                    price: 25,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 10 countries",
+                        "4G network access"
+                    ]
+                },
+                {
+                    name: "Tourist Max",
+                    duration: 28,
+                    data: "55GB",
+                    price: 40,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 15 countries",
+                        "5G network access"
+                    ]
+                }
+            ],
+            postpaid: [
+                {
+                    name: "Business Starter",
+                    duration: 30,
+                    data: "100GB",
+                    price: 60,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 15 countries",
+                        "5G network access",
+                        "Business support line",
+                        "Fleet management portal"
+                    ]
+                },
+                {
+                    name: "Business Plus",
+                    duration: 30,
+                    data: "250GB",
+                    price: 80,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 30 countries",
+                        "5G network access",
+                        "Priority business support",
+                        "Fleet management portal",
+                        "Data pooling available"
+                    ]
+                },
+                {
+                    name: "Resident Basic",
+                    duration: 30,
+                    data: "75GB",
+                    price: 50,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 10 countries",
+                        "5G network access",
+                        "Data rollover"
+                    ]
+                },
+                {
+                    name: "Resident Max",
+                    duration: 30,
+                    data: "200GB",
+                    price: 70,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 25 countries",
+                        "5G network access",
+                        "Data rollover",
+                        "Entertainment package included"
+                    ]
+                }
+            ]
         },
-        features: ["5G", "4G", "3G"],
-        speed: "Fast",
-        networkTier: "Standard"
+        store_locations: {
+            cbd: [
+                {
+                    name: "Optus Store Pitt St",
+                    address: "Pitt Street Mall, Sydney",
+                    hours: "Mon-Sat: 9:00-17:30",
+                    phone: "02 9XXX XXXX",
+                    google_maps: "https://maps.google.com",
+                    nearest_transport: "Town Hall Station (5 min walk)"
+                }
+            ]
+        },
+        support: {
+            tourist_hotline: "1800 XXX XXX",
+            tourist_support_hours: "8AM-8PM",
+            languages: ["English", "Mandarin"]
+        },
+        business_support: {
+            hotline: "1800 XXX XXX",
+            support_hours: "8AM-8PM",
+            features: [
+                "Business support team",
+                "Online business portal",
+                "Fleet management tools"
+            ]
+        },
+        resident_support: {
+            hotline: "1800 XXX XXX",
+            support_hours: "8AM-8PM",
+            features: [
+                "Local technical support",
+                "Online self-service",
+                "Store support network"
+            ]
+        }
     }
 };
 
-// All Providers with their details
-const providers = [
-    {
-        name: "Telstra",
-        type: "major",
-        network: "telstra",
-        plans: {
-            prepaid: [
-                {
-                    name: "Prepaid Max",
-                    data: "Unlimited",
-                    price: 65,
-                    features: ["5G Access", "Unlimited Calls/Text", "International Minutes"]
-                }
-            ],
-            postpaid: [
-                {
-                    name: "Premium Mobile",
-                    data: "180GB",
-                    price: 85,
-                    features: ["5G Access", "International Roaming", "Entertainment Extras"]
-                }
-            ]
-        },
-        specialFeatures: ["5G Network", "Telstra Air WiFi", "Entertainment Extras", "International Roaming"],
-        bestFor: ["Premium Users", "Business", "High Data Users"],
-        storeLocations: {
-            cbd: ["Pitt St Mall", "World Square"],
-            suburban: ["Bondi Junction", "Parramatta"]
-        }
-    },
-    // Add more providers here...
-    // Major Carriers (continue after Telstra)
-    {
-        name: "Optus",
-        type: "major",
-        network: "optus",
-        plans: {
-            prepaid: [
-                {
-                    name: "Prepaid Plus",
-                    data: "100GB",
-                    price: 49,
-                    features: ["4G/5G", "Unlimited Calls/Text", "Entertainment Extras"]
-                },
-                {
-                    name: "Prepaid Basic",
-                    data: "40GB",
-                    price: 30,
-                    features: ["4G Coverage", "Unlimited Calls/Text"]
-                }
-            ],
-            postpaid: [
-                {
-                    name: "Optus Choice Plus",
-                    data: "150GB",
-                    price: 65,
-                    features: ["5G Access", "International Calls", "Entertainment Bundle"]
-                },
-                {
-                    name: "Optus Premium",
-                    data: "Unlimited",
-                    price: 85,
-                    features: ["5G Access", "International Roaming", "Entertainment Bundle"]
-                }
-            ]
-        },
-        specialFeatures: ["5G Network", "Optus Sport", "Entertainment Bundle", "International Calls"],
-        bestFor: ["Entertainment", "Value Seekers", "Students"],
-        storeLocations: {
-            cbd: ["George Street", "Broadway Shopping Centre"],
-            suburban: ["Chatswood", "Miranda"]
-        }
-    },
-    {
-        name: "Vodafone",
-        type: "major",
-        network: "vodafone",
-        plans: {
-            prepaid: [
-                {
-                    name: "Prepaid Plus",
-                    data: "65GB",
-                    price: 40,
-                    features: ["5G Access", "International Minutes", "Data Banking"]
-                },
-                {
-                    name: "Prepaid Starter",
-                    data: "25GB",
-                    price: 25,
-                    features: ["4G Coverage", "Unlimited Calls/Text"]
-                }
-            ],
-            postpaid: [
-                {
-                    name: "5G Infinite",
-                    data: "Unlimited",
-                    price: 65,
-                    features: ["5G Access", "International Calls", "Bundle Discounts"]
-                },
-                {
-                    name: "Premium Infinite",
-                    data: "Unlimited",
-                    price: 85,
-                    features: ["5G Access", "International Roaming", "Bundle Discounts"]
-                }
-            ]
-        },
-        specialFeatures: ["5G Network", "International Roaming", "Bundle Discounts"],
-        bestFor: ["International Users", "High Data Users", "Students"],
-        storeLocations: {
-            cbd: ["QVB", "World Square"],
-            suburban: ["Parramatta", "Bondi Junction"]
-        }
-    },
-
-    // MVNOs Using Telstra's Network
-    {
+const mvnoProviders = {
+    boost: {
         name: "Boost Mobile",
         type: "mvno",
         network: "telstra",
+        coverage: {
+            sydney: {
+                general: "Very Good",
+                cbd: { general: "Very Good" },
+                inner: { general: "Very Good" },
+                eastern: { general: "Very Good" },
+                western: { general: "Good" },
+                northern: { general: "Very Good" },
+                southern: { general: "Good" }
+            }
+        },
         plans: {
             prepaid: [
                 {
-                    name: "Premium Prepaid",
-                    data: "100GB",
-                    price: 50,
-                    features: ["Full Telstra Coverage", "International Calls", "Data Banking"]
+                    name: "Tourist Value",
+                    duration: 28,
+                    data: "20GB",
+                    price: 20,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 5 countries",
+                        "4G network access"
+                    ]
                 },
                 {
-                    name: "Basic Prepaid",
-                    data: "40GB",
-                    price: 30,
-                    features: ["Full Telstra Coverage", "Unlimited Calls/Text"]
+                    name: "Tourist Pro",
+                    duration: 28,
+                    data: "45GB",
+                    price: 35,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 10 countries",
+                        "4G network access"
+                    ]
                 }
-            ]
-        },
-        specialFeatures: ["Data Banking", "Full Telstra Coverage", "International Calls"],
-        bestFor: ["Value Seekers", "Students", "Light Users"]
-    },
-    {
-        name: "ALDI Mobile",
-        type: "mvno",
-        network: "telstra",
-        plans: {
-            prepaid: [
+            ],
+            postpaid: [
                 {
-                    name: "XL Value Pack",
+                    name: "Resident Essential",
+                    duration: 30,
                     data: "65GB",
                     price: 45,
-                    features: ["Telstra Network", "Unlimited Calls/Text", "Data Banking"]
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 10 countries",
+                        "4G network access",
+                        "Data banking"
+                    ]
                 },
                 {
-                    name: "M Value Pack",
-                    data: "25GB",
-                    price: 25,
-                    features: ["Telstra Network", "Unlimited Calls/Text"]
+                    name: "Resident Plus",
+                    duration: 30,
+                    data: "185GB",
+                    price: 65,
+                    features: [
+                        "Unlimited Calls/SMS in Australia",
+                        "International calls to 20 countries",
+                        "4G network access",
+                        "Data banking",
+                        "Entertainment extras"
+                    ]
                 }
             ]
         },
-        specialFeatures: ["Data Banking", "Value Plans"],
-        bestFor: ["Budget Conscious", "Light Users"]
-    },
-    {
-        name: "Belong",
-        type: "mvno",
-        network: "telstra",
-        plans: {
-            postpaid: [
+        store_locations: {
+            cbd: [
                 {
-                    name: "Large Mobile Plan",
-                    data: "100GB",
-                    price: 45,
-                    features: ["Data Banking", "Unlimited Calls/Text", "Data Gifting"]
-                },
-                {
-                    name: "Regular Mobile Plan",
-                    data: "40GB",
-                    price: 25,
-                    features: ["Data Banking", "Unlimited Calls/Text"]
+                    name: "Boost Kiosk World Square",
+                    address: "World Square Shopping Centre",
+                    hours: "Mon-Sun: 10:00-18:00",
+                    phone: "02 9XXX XXXX",
+                    google_maps: "https://maps.google.com",
+                    nearest_transport: "Town Hall Station (7 min walk)"
                 }
             ]
         },
-        specialFeatures: ["Data Banking", "Data Gifting", "Carbon Neutral"],
-        bestFor: ["Value Seekers", "Environmentally Conscious"]
-    },
-
-    // MVNOs Using Optus Network
-    {
-        name: "Amaysim",
-        type: "mvno",
-        network: "optus",
-        plans: {
-            prepaid: [
-                {
-                    name: "Unlimited 80GB",
-                    data: "80GB",
-                    price: 40,
-                    features: ["Optus 4G", "Unlimited Calls/Text", "International Calls"]
-                },
-                {
-                    name: "Unlimited 30GB",
-                    data: "30GB",
-                    price: 25,
-                    features: ["Optus 4G", "Unlimited Calls/Text"]
-                }
+        support: {
+            tourist_hotline: "1800 XXX XXX",
+            tourist_support_hours: "9AM-6PM",
+            languages: ["English"]
+        },
+        resident_support: {
+            hotline: "1800 XXX XXX",
+            support_hours: "9AM-6PM",
+            features: [
+                "Phone support",
+                "Online chat support",
+                "Store support"
             ]
-        },
-        specialFeatures: ["No Lock-in Contracts", "International Calls"],
-        bestFor: ["Value Seekers", "International Callers"]
-    },
-    {
-        name: "Circles.Life",
-        type: "mvno",
-        network: "optus",
-        plans: {
-            postpaid: [
-                {
-                    name: "100GB Plan",
-                    data: "100GB",
-                    price: 35,
-                    features: ["Optus 4G/5G", "Unlimited Calls/Text", "Data Banking"]
-                },
-                {
-                    name: "50GB Plan",
-                    data: "50GB",
-                    price: 25,
-                    features: ["Optus 4G", "Unlimited Calls/Text"]
-                }
-            ]
-        },
-        specialFeatures: ["Data Banking", "Flexible Plans", "Bill Shock Protection"],
-        bestFor: ["Digital Natives", "Value Seekers"]
-    },
-
-    // MVNOs Using Vodafone Network
-    {
-        name: "Lebara",
-        type: "mvno",
-        network: "vodafone",
-        plans: {
-            prepaid: [
-                {
-                    name: "Extra Large Plan",
-                    data: "80GB",
-                    price: 45,
-                    features: ["Vodafone 4G", "International Calls", "Data Banking"]
-                },
-                {
-                    name: "Medium Plan",
-                    data: "30GB",
-                    price: 25,
-                    features: ["Vodafone 4G", "International Calls"]
-                }
-            ]
-        },
-        specialFeatures: ["International Calls", "Data Banking"],
-        bestFor: ["International Callers", "Tourists"]
-    },
-    {
-        name: "TPG",
-        type: "mvno",
-        network: "vodafone",
-        plans: {
-            postpaid: [
-                {
-                    name: "Large Plan",
-                    data: "60GB",
-                    price: 40,
-                    features: ["Vodafone 4G", "Unlimited Calls/Text", "No Lock-in"]
-                },
-                {
-                    name: "Medium Plan",
-                    data: "30GB",
-                    price: 30,
-                    features: ["Vodafone 4G", "Unlimited Calls/Text"]
-                }
-            ]
-        },
-        specialFeatures: ["No Lock-in Contracts", "Bundle with Internet"],
-        bestFor: ["Value Seekers", "Bundle Customers"]
-    }
-];
-
-// Special Deals and Promotions
-const specialDeals = {
-    entertainment: {
-        sports: ["Telstra", "Optus"],
-        streaming: ["Vodafone", "Optus", "Telstra"]
-    },
-    international: {
-        roaming: ["Telstra", "Optus", "Vodafone"],
-        calls: ["Lycamobile", "Lebara", "Vodafone"]
-    },
-    student: {
-        providers: ["Optus", "Vodafone", "Boost Mobile"],
-        discounts: true
-    }
-};
-
-// Usage Scenarios for Different User Types
-const localInsights = {
-    usage_scenarios: {
-        tourist: {
-            recommended_duration: ["short", "medium"],
-            best_providers: ["Boost Mobile", "Amaysim", "Lycamobile"],
-            important_features: ["prepaid", "international_calls", "flexible_duration"],
-            avg_data_needs: "30GB",
-            typical_budget: "30-50"
-        },
-        student: {
-            recommended_duration: ["long", "permanent"],
-            best_providers: ["Optus", "Vodafone", "Boost Mobile"],
-            important_features: ["data_heavy", "entertainment", "student_discount"],
-            avg_data_needs: "100GB",
-            typical_budget: "30-65"
-        },
-        business: {
-            recommended_duration: ["permanent"],
-            best_providers: ["Telstra", "Optus", "Vodafone"],
-            important_features: ["reliability", "coverage", "5g", "support"],
-            avg_data_needs: "Unlimited",
-            typical_budget: "65-120"
-        },
-        resident: {
-            recommended_duration: ["permanent"],
-            best_providers: ["Belong", "Boost Mobile", "Amaysim"],
-            important_features: ["value", "local_calls", "flexible_data"],
-            avg_data_needs: "50GB",
-            typical_budget: "25-45"
-        }
-    },
-    location_insights: {
-        cbd: {
-            best_coverage: ["Telstra", "Optus", "Vodafone"],
-            peak_hours: "8am-6pm",
-            typical_speeds: "Excellent"
-        },
-        inner: {
-            best_coverage: ["Telstra", "Optus", "Vodafone"],
-            peak_hours: "7am-7pm",
-            typical_speeds: "Very Good"
-        },
-        eastern: {
-            best_coverage: ["Telstra", "Optus"],
-            peak_hours: "6am-10pm",
-            typical_speeds: "Very Good"
-        },
-        western: {
-            best_coverage: ["Telstra", "Optus"],
-            peak_hours: "6am-8pm",
-            typical_speeds: "Good"
         }
     }
 };
 
-// Function to get recommendations based on user profile
-function getRecommendations(userProfile) {
-    let matchedProviders = [...providers];
-    const userInsights = localInsights.usage_scenarios[userProfile.userType];
+// Functions used by the plan finder
+function getDetailedRecommendations(userProfile) {
+    console.log('Getting recommendations for:', userProfile);
 
-    // Filter by budget
-    if (userProfile.budget) {
-        const maxBudget = parseInt(userProfile.budget);
-        matchedProviders = matchedProviders.filter(provider => {
-            const cheapestPlan = Math.min(
-                ...Object.values(provider.plans)
-                    .flat()
-                    .map(plan => plan.price)
-            );
-            return cheapestPlan <= maxBudget;
-        });
-    }
-
-    // Filter by plan type
-    if (userProfile.planType !== 'any') {
-        matchedProviders = matchedProviders.filter(provider =>
-            provider.plans[userProfile.planType]?.length > 0
-        );
-    }
-
-    // Score providers based on user needs
-    matchedProviders = matchedProviders.map(provider => {
-        let score = 0;
-        const network = networkProviders[provider.network];
-
-        // Score based on coverage
-        if (userProfile.needs.coverage) {
-            score += network.coverage.sydney.general === 'Excellent' ? 3 :
-                network.coverage.sydney.general === 'Very good' ? 2 : 1;
+    try {
+        // Input validation
+        if (!userProfile || !userProfile.location || !userProfile.budget) {
+            throw new Error('Missing required profile information');
         }
 
-        // Score based on user type match
-        if (userInsights?.best_providers.includes(provider.name)) {
-            score += 2;
-        }
+        let allProviders = [
+            ...Object.values(networkProviders),
+            ...Object.values(mvnoProviders)
+        ];
 
-        // Score based on features
-        if (userProfile.needs.international &&
-            provider.specialFeatures?.some(f => f.toLowerCase().includes('international'))) {
-            score += 2;
-        }
+        // Score and filter providers
+        const scoredProviders = allProviders.map(provider => {
+            let score = 0;
+            const reasons = [];
 
-        if (userProfile.needs.entertainment &&
-            specialDeals.entertainment.streaming.includes(provider.name)) {
-            score += 1;
-        }
-
-        return {
-            ...provider,
-            score,
-            network: network
-        };
-    });
-
-    // Sort by score
-    return matchedProviders.sort((a, b) => b.score - a.score);
-}
-
-// Add this function before the final window assignments
-function getPlanInsights(plan, userProfile) {
-    const insights = [];
-
-    // Network Quality Insights
-    if (plan.network.name === "Telstra") {
-        insights.push({
-            type: "benefit",
-            icon: "✓",
-            message: "Best network coverage in Sydney - ideal for reliable connectivity"
-        });
-
-        if (userProfile.location === "western" || userProfile.location === "southern") {
-            insights.push({
-                type: "benefit",
-                icon: "✓",
-                message: "Superior coverage in outer Sydney areas"
-            });
-        }
-    }
-
-    // Data and Plan Type Insights
-    if (userProfile.dataNeeds === "heavy") {
-        const planType = userProfile.planType === 'any' ?
-            (plan.plans.postpaid ? 'postpaid' : 'prepaid') :
-            userProfile.planType;
-
-        const selectedPlan = plan.plans[planType][0];
-
-        if (selectedPlan.data !== "Unlimited") {
-            insights.push({
-                type: "warning",
-                icon: "⚠",
-                message: "For heavy data users, consider unlimited plans to avoid excess charges"
-            });
-        }
-    }
-
-    // Provider-specific insights
-    switch (plan.name) {
-        case "Optus":
-            insights.push({
-                type: "tip",
-                icon: "💡",
-                message: "CBA customers get up to 20% off through CommBank Rewards"
-            });
-            break;
-
-        case "Telstra":
-            if (plan.specialFeatures.includes("Entertainment Extras")) {
-                insights.push({
-                    type: "tip",
-                    icon: "💡",
-                    message: "Includes Foxtel Now + free sports streaming"
-                });
+            // Score based on user type
+            if (userProfile.userType === 'student') {
+                const hasStudentPlans = provider.plans?.prepaid?.some(
+                    plan => plan.features.some(f => f.toLowerCase().includes('student'))
+                );
+                if (hasStudentPlans) {
+                    score += 20;
+                    reasons.push('Student-specific plans available');
+                }
             }
-            break;
-    }
 
-    // Stay duration insights
-    if (userProfile.stayDuration === "short" && !plan.name.toLowerCase().includes("prepaid")) {
-        insights.push({
-            type: "warning",
-            icon: "⚠",
-            message: "Short-term visitors should consider prepaid plans"
+            // Score coverage
+            const coverage = provider.coverage?.sydney?.[userProfile.location]?.general;
+            if (coverage) {
+                switch (coverage.toLowerCase()) {
+                    case 'excellent':
+                        score += 30;
+                        reasons.push('Excellent coverage in your area');
+                        break;
+                    case 'very good':
+                        score += 25;
+                        reasons.push('Very good coverage in your area');
+                        break;
+                    case 'good':
+                        score += 20;
+                        reasons.push('Good coverage in your area');
+                        break;
+                }
+            }
+
+            // Score budget match
+            const plans = provider.plans?.prepaid || [];
+            const hasPlanInBudget = plans.some(plan =>
+                plan.price <= parseInt(userProfile.budget)
+            );
+
+            if (hasPlanInBudget) {
+                score += 20;
+                reasons.push('Has plans within your budget');
+            }
+
+            // Score data needs
+            const hasEnoughData = plans.some(plan => {
+                const planData = parseInt(plan.data) || 0;
+                switch (userProfile.dataNeeds) {
+                    case 'light': return planData >= 15;
+                    case 'medium': return planData >= 30;
+                    case 'heavy': return planData >= 50;
+                    default: return true;
+                }
+            });
+
+            if (hasEnoughData) {
+                score += 20;
+                reasons.push('Matches your data needs');
+            }
+
+            // Score features
+            if (userProfile.needs?.international) {
+                const hasInternational = plans.some(plan =>
+                    plan.features.some(f => f.toLowerCase().includes('international'))
+                );
+                if (hasInternational) {
+                    score += 10;
+                    reasons.push('International calling available');
+                }
+            }
+
+            return {
+                ...provider,
+                score,
+                reasons,
+                isGoodMatch: score > 40
+            };
         });
-    }
 
-    return insights;
+        // Filter and sort recommendations
+        const recommendations = scoredProviders
+            .filter(provider => provider.isGoodMatch)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 3);
+
+        if (recommendations.length === 0) {
+            throw new Error('No matching plans found. Try adjusting your criteria.');
+        }
+
+        return recommendations;
+
+    } catch (error) {
+        console.error('Error in recommendations:', error);
+        throw error;
+    }
+}
+// Helper functions used by the UI
+function findBestMatchingPlan(provider, userProfile) {
+    const plans = provider.plans?.prepaid || [];
+    const budget = parseInt(userProfile.budget);
+
+    return plans.reduce((best, plan) => {
+        if (!best) return plan;
+        if (plan.price <= budget && (!best || plan.price > best.price)) {
+            return plan;
+        }
+        return best;
+    }, null);
 }
 
-// Add this line with the other window assignments at the bottom
-window.getPlanInsights = getPlanInsights;
+function findCheapestPlan(provider) {
+    const plans = provider.plans?.prepaid || [];
+    return plans.reduce((cheapest, plan) => {
+        if (!cheapest || plan.price < cheapest.price) return plan;
+        return cheapest;
+    }, null);
+}
 
-// Make these available to other files
+// Export for browser use
 window.networkProviders = networkProviders;
-window.providers = providers;
-window.specialDeals = specialDeals;
-window.localInsights = localInsights;
-window.getRecommendations = getRecommendations;
+window.mvnoProviders = mvnoProviders;
+window.getDetailedRecommendations = getDetailedRecommendations;
+window.findBestMatchingPlan = findBestMatchingPlan;
+window.findCheapestPlan = findCheapestPlan;

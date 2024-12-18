@@ -19,7 +19,6 @@
             }
         }
     </script>
-    <script src="telco-data.js"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen font-sans">
@@ -161,16 +160,84 @@
                         </div>
                     </div>
 
-                    <div class="mb-8">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Data Usage</label>
-                        <select id="dataNeeds"
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select data needs</option>
-                            <option value="light">Light (0-30GB)</option>
-                            <option value="medium">Medium (30-100GB)</option>
-                            <option value="heavy">Heavy (100GB+)</option>
-                            <option value="unlimited">Unlimited</option>
-                        </select>
+                    <!-- Usage Calculator Integration -->
+                    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Calculate Your Data Needs</h3>
+
+                            <!-- Trip Duration -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Trip Duration (days)
+                                </label>
+                                <input type="number" id="tripDuration" min="1" max="365"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value="7">
+                            </div>
+
+                            <!-- Daily Activities -->
+                            <div class="space-y-4">
+                                <!-- Maps/Navigation -->
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700">Maps & Navigation</label>
+                                        <input type="number" id="navigationHours" min="0" max="24"
+                                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Hours per day">
+                                    </div>
+                                </div>
+
+                                <!-- Video Calls -->
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700">Video Calls</label>
+                                        <input type="number" id="videoHours" min="0" max="24"
+                                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Hours per day">
+                                    </div>
+                                </div>
+
+                                <!-- Social Media -->
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <label class="block text-sm font-medium text-gray-700">Social Media</label>
+                                        <input type="number" id="socialHours" min="0" max="24"
+                                            class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Hours per day">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Results Section -->
+                            <div class="mt-6 bg-blue-50 rounded-xl p-4">
+                                <h4 class="font-medium text-blue-900">Estimated Monthly Data Usage</h4>
+                                <div id="usageResult" class="mt-2">
+                                    <p class="text-blue-800 text-2xl font-bold">-- GB</p>
+                                </div>
+                                <input type="hidden" id="dataNeeds" value="">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex gap-4">
@@ -195,14 +262,33 @@
                             phone?</label>
                         <select id="location"
                             class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select primary location</option>
-                            <option value="cbd">Sydney CBD</option>
-                            <option value="inner">Inner Sydney</option>
-                            <option value="eastern">Eastern Suburbs</option>
-                            <option value="western">Western Sydney</option>
-                            <option value="northern">Northern Suburbs</option>
-                            <option value="southern">Southern Sydney</option>
+                            <option value="">Select your main area</option>
+                            <option value="cbd">City Centre (CBD) - Downtown Sydney, Opera House, Harbour Bridge area
+                            </option>
+                            <option value="inner">Inner City - Surry Hills, Newtown, Glebe, trendy neighborhoods
+                            </option>
+                            <option value="eastern">Eastern Beaches - Bondi, Coogee, Bronte Beach areas</option>
+                            <option value="western">Greater West - Parramatta, Olympic Park, Western suburbs</option>
+                            <option value="northern">North Shore - Manly, Chatswood, Northern beaches</option>
+                            <option value="southern">South Sydney - Airport area, Cronulla Beach, The Shire</option>
                         </select>
+
+                        <!-- Area Description (initially hidden) -->
+                        <div id="areaDescription" class="hidden mt-3 p-4 bg-blue-50 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-5 h-5 mt-0.5">
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p id="areaDetail" class="text-sm text-gray-700"></p>
+                                    <p id="areaTouristSpots" class="text-sm text-blue-600 mt-2"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-8">
@@ -249,11 +335,109 @@
 
                 <!-- Step 4: Results -->
                 <div class="step-content hidden" id="step4">
-                    <!-- Results will be dynamically populated -->
+                    <h2 class="text-2xl font-bold mb-6">Your Recommended Plans</h2>
+
+                    <!-- Results Container -->
+                    <div class="space-y-8" id="recommendationsList">
+                        <!-- Loading State -->
+                        <div class="text-center py-8" id="loadingState">
+                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                            <p class="mt-4 text-gray-600">Finding the best plans for you...</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Template for recommendation card -->
+                <template id="recommendationTemplate">
+                    <div class="bg-white rounded-xl border-2 border-blue-500 p-6 shadow-lg">
+                        <!-- Provider Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-semibold"></h3>
+                                <p class="text-gray-600"></p>
+                                <p class="text-sm text-gray-500">Network: <span class="network-name"></span></p>
+                            </div>
+                            <span
+                                class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full recommendation-tag"></span>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-sm text-gray-500">Coverage</div>
+                                <div class="font-semibold coverage-quality"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-sm text-gray-500">Starting From</div>
+                                <div class="font-semibold price"></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-sm text-gray-500">Data</div>
+                                <div class="font-semibold data-amount"></div>
+                            </div>
+                        </div>
+
+                        <!-- Expandable Sections -->
+                        <div class="space-y-4">
+                            <!-- Nearby Stores -->
+                            <div class="border rounded-lg">
+                                <button class="flex justify-between items-center w-full px-4 py-3 text-left">
+                                    <span class="font-medium">Nearby Stores</span>
+                                    <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="hidden px-4 pb-4 stores-list">
+                                    <!-- Will be populated with store details -->
+                                </div>
+                            </div>
+
+                            <!-- Coverage Details -->
+                            <div class="border rounded-lg">
+                                <button class="flex justify-between items-center w-full px-4 py-3 text-left">
+                                    <span class="font-medium">Coverage Details</span>
+                                    <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="hidden px-4 pb-4 coverage-details">
+                                    <!-- Will be populated with coverage details -->
+                                </div>
+                            </div>
+
+                            <!-- Special Features -->
+                            <div class="border rounded-lg">
+                                <button class="flex justify-between items-center w-full px-4 py-3 text-left">
+                                    <span class="font-medium">Special Features</span>
+                                    <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="hidden px-4 pb-4 special-features">
+                                    <!-- Will be populated with features -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button
+                            class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                            Get This Plan
+                        </button>
+                    </div>
+                </template>
             </div>
         </div>
     </div>
+
+    <script src="telco-data.js"></script>
+
 
     <script>
         // State management
@@ -273,6 +457,24 @@
                 speed: false
             }
         };
+
+        // Add this after your formData initialization
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set initial values for the usage calculator
+            calculateUsage();
+
+            // Set default plan type to "any"
+            const anyPlanRadio = document.querySelector('input[name="planType"][value="any"]');
+            if (anyPlanRadio) {
+                anyPlanRadio.checked = true;
+                formData.planType = 'any';
+            }
+
+            // Validate initial state
+            validateStep1();
+            validateStep2();
+            validateStep3();
+        });
 
         // DOM Elements
         const userTypeBtns = document.querySelectorAll('.user-type-btn');
@@ -332,11 +534,6 @@
             validateStep2();
         });
 
-        // Step 3 Validation
-        function validateStep3() {
-            const isValid = formData.location;
-            nextStep3.disabled = !isValid;
-        }
 
         // Location Selection
         document.getElementById('location').addEventListener('change', (e) => {
@@ -405,32 +602,314 @@
         nextStep2.addEventListener('click', nextStep);
         nextStep3.addEventListener('click', showResults);
 
-        // Function to show results
+
+
+        // Add this at the end of your showResults function in the HTML file
+        // Replace your existing showResults function with this one
         function showResults() {
             currentStep = 4;
             showStep(4);
 
-            // Get the results container
-            const resultsContainer = document.getElementById('step4');
+            // Log the form data to verify it's correct
+            console.log('Submitting form data:', formData);
 
-            // Clear previous results
-            resultsContainer.innerHTML = `
-                <h2 class="text-2xl font-bold mb-6">Recommended Plans</h2>
-                <div class="space-y-6" id="recommendationsList">
-                    <!-- Results will be populated here -->
-                    <div class="text-center py-8">
-                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                        <p class="mt-4 text-gray-600">Finding the best plans for you...</p>
-                    </div>
+            // Get the results container and clear previous results
+            const resultsContainer = document.getElementById('recommendationsList');
+            const loadingState = document.getElementById('loadingState');
+
+            try {
+                // Verify that the necessary functions are available
+                if (typeof window.getDetailedRecommendations !== 'function') {
+                    throw new Error('Recommendation engine not properly loaded');
+                }
+
+                // Make sure all required data is present
+                if (!formData.userType || !formData.location || !formData.dataNeeds) {
+                    throw new Error('Missing required form data');
+                }
+
+                // Get recommendations
+                const recommendations = window.getDetailedRecommendations(formData);
+                console.log('Raw recommendations:', recommendations);
+
+                if (!recommendations || recommendations.length === 0) {
+                    resultsContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <p class="text-gray-600">No matching plans found. Please try adjusting your criteria.</p>
                 </div>
             `;
+                    return;
+                }
 
-            // Simulate API call with setTimeout
-            setTimeout(() => {
-                // This is where you would normally make an API call to get recommendations
-                const mockRecommendations = getMockRecommendations();
-                displayRecommendations(mockRecommendations);
-            }, 1500);
+                // Display recommendations
+                displayRecommendations(recommendations);
+
+            } catch (error) {
+                console.error('Error getting recommendations:', error);
+                resultsContainer.innerHTML = `
+            <div class="text-center py-8">
+                <p class="text-red-600">There was an error finding plans. Please try again.</p>
+                <p class="text-sm text-gray-600 mt-2">${error.message}</p>
+            </div>
+        `;
+            } finally {
+                // Remove loading state
+                if (loadingState) {
+                    loadingState.remove();
+                }
+            }
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsList');
+            const template = document.getElementById('recommendationTemplate');
+            const loadingState = document.getElementById('loadingState');
+
+            // Remove loading state
+            if (loadingState) loadingState.remove();
+            container.innerHTML = '';
+
+
+            recommendations.forEach((recommendation, index) => {
+                const card = template.content.cloneNode(true);
+
+                // Set provider name and details
+                card.querySelector('h3').textContent = recommendation.name;
+
+                // Set recommendation tag
+                const tagElem = card.querySelector('.recommendation-tag');
+                tagElem.textContent = index === 0 ? "Best Match" :
+                    index === 1 ? "Great Value" :
+                        "Good Option";
+
+                // Set network name
+                const networkName = card.querySelector('.network-name');
+                networkName.textContent = recommendation.type === 'major' ?
+                    `${recommendation.name} Network` :
+                    `${recommendation.network?.toUpperCase() || 'Standard'} network`;
+
+                // Set coverage quality
+                // Set coverage quality
+                const coverageQuality = card.querySelector('.coverage-quality');
+                const coverage = recommendation?.coverage?.sydney?.[formData.location]?.general || 'Standard';
+                coverageQuality.textContent = coverage;
+
+                // Find the best plan for this user
+                const bestPlan = window.findBestMatchingPlan(recommendation, formData) ||
+                    window.findCheapestPlan(recommendation);
+
+                // Set price
+                const priceElem = card.querySelector('.price');
+                priceElem.textContent = bestPlan ? `$${bestPlan.price}/mo` : 'Varies';
+
+                // Set data amount
+                const dataElem = card.querySelector('.data-amount');
+                dataElem.textContent = bestPlan ? bestPlan.data : 'Varies';
+
+                // Populate stores list
+                const storesList = card.querySelector('.stores-list');
+                populateStoresList(storesList, recommendation.store_locations?.[formData.location] || []);
+
+                // Populate coverage details
+                const coverageDetails = card.querySelector('.coverage-details');
+                populateCoverageDetails(coverageDetails, recommendation, formData.location);
+
+                // Populate special features
+                const specialFeatures = card.querySelector('.special-features');
+                populateSpecialFeatures(specialFeatures, recommendation);
+
+                // Add click handlers for expandable sections
+                // card.querySelectorAll('button').forEach(button => {
+                //     if (!button.classList.contains('w-full')) { // Skip the main action button
+                //         button.addEventListener('click', function () {
+                //             const content = this.nextElementSibling;
+                //             const arrow = this.querySelector('svg');
+                //             content.classList.toggle('hidden');
+                //             arrow.classList.toggle('rotate-180');
+                //         });
+                //     }
+                // });
+
+                const expandButtons = card.querySelectorAll('.border.rounded-lg > button');
+                expandButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        // Find the content div that follows this button
+                        const content = this.nextElementSibling;
+                        const arrow = this.querySelector('svg');
+
+                        // Toggle visibility
+                        if (content.classList.contains('hidden')) {
+                            // If it's hidden, show it and update content if needed
+                            content.classList.remove('hidden');
+                            arrow.classList.add('rotate-180');
+
+                            // Determine which section this is and populate content
+                            if (content.classList.contains('stores-list')) {
+                                populateStoresList(content, recommendation.store_locations?.[formData.location] || []);
+                            } else if (content.classList.contains('coverage-details')) {
+                                populateCoverageDetails(content, recommendation, formData.location);
+                            } else if (content.classList.contains('special-features')) {
+                                populateSpecialFeatures(content, recommendation);
+                            }
+                        } else {
+                            // If it's shown, hide it
+                            content.classList.add('hidden');
+                            arrow.classList.remove('rotate-180');
+                        }
+                    });
+                });
+
+
+                container.appendChild(card);
+            });
+        }
+        // Helper function to find cheapest plan
+        function findCheapestPlan(provider) {
+            const allPlans = [
+                ...(provider.plans?.prepaid || []),
+                ...(provider.plans?.postpaid || [])
+            ];
+
+            return allPlans.reduce((cheapest, plan) => {
+                if (!cheapest || plan.price < cheapest.price) {
+                    return plan;
+                }
+                return cheapest;
+            }, null);
+        }
+
+        // Helper functions
+        function getNetworkName(provider) {
+            if (provider.type === 'major') return `${provider.name} Network`;
+            return `${provider.name} (${provider.network.toUpperCase()} network)`;
+        }
+
+        function findCheapestPlan(provider) {
+            const plans = provider.plans?.prepaid || provider.plans?.postpaid || [];
+            return plans.reduce((cheapest, plan) =>
+                (!cheapest || plan.price < cheapest.price) ? plan : cheapest, null);
+        }
+
+        function getBestDataPlan(provider) {
+            const plans = provider.plans?.prepaid || provider.plans?.postpaid || [];
+            const bestPlan = plans.reduce((best, plan) =>
+                (!best || parseInt(plan.data) > parseInt(best.data)) ? plan : best, null);
+            return bestPlan?.data || 'N/A';
+        }
+
+        function populateStoresList(container, stores) {
+            if (!stores?.length) {
+                container.innerHTML = `
+        <p class="text-gray-600 text-sm">No physical stores nearby. Visit website to purchase.</p>
+    `;
+                return;
+            }
+
+            container.innerHTML = stores.map(store => `
+        <div class="mb-4 last:mb-0">
+            <h4 class="font-medium text-gray-900">${store.name}</h4>
+            <p class="text-sm text-gray-600">${store.address}</p>
+            <p class="text-sm text-gray-600">${store.hours}</p>
+            <div class="mt-2 flex items-center space-x-4">
+                <a href="tel:${store.phone}" class="text-blue-600 text-sm hover:underline">
+                    ${store.phone}
+                </a>
+                <a href="${store.google_maps}" target="_blank" class="text-blue-600 text-sm hover:underline">
+                    View on Maps
+                </a>
+            </div>
+            <p class="text-sm text-gray-500 mt-1">
+                <span class="text-blue-600">📍</span> ${store.nearest_transport}
+            </p>
+        </div>
+    `).join('');
+        }
+
+        function populateCoverageDetails(container, provider, location) {
+            try {
+                const coverage = provider?.coverage?.sydney || {};
+                const peakPerformance = coverage?.peak_performance?.[location];
+                const deadZones = coverage?.dead_zones || [];
+
+                container.innerHTML = `
+        <div class="space-y-4">
+            ${peakPerformance ? `
+                <div class="bg-yellow-50 p-3 rounded-lg">
+                    <h4 class="font-medium text-yellow-800">Peak Hours</h4>
+                    <p class="text-sm text-yellow-700">${peakPerformance.peak_times}</p>
+                    <p class="text-sm text-yellow-600 mt-1">${peakPerformance.impact}</p>
+                </div>
+            ` : ''}
+            
+            ${deadZones.length > 0 ? `
+                <div class="bg-red-50 p-3 rounded-lg">
+                    <h4 class="font-medium text-red-800">Known Coverage Gaps</h4>
+                    ${deadZones.map(zone => `
+                        <div class="mt-2">
+                            <p class="text-sm text-red-700">${zone.location}</p>
+                            <p class="text-sm text-red-600">${zone.description}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+            
+            ${provider.complementary_wifi ? `
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <h4 class="font-medium text-green-800">Free WiFi Access</h4>
+                    <p class="text-sm text-green-700">${provider.complementary_wifi.access || 'Available'}</p>
+                    <p class="text-sm text-green-600 mt-1">Available at: ${provider.complementary_wifi.locations?.[location]?.join(', ') || 'Selected locations'}</p>
+                </div>
+            ` : ''}
+            
+            ${!peakPerformance && !deadZones.length && !provider.complementary_wifi ? `
+                <p class="text-gray-600 text-sm">Standard coverage available in this area</p>
+            ` : ''}
+        </div>
+    `;
+            } catch (error) {
+                console.error('Error displaying coverage details:', error);
+                container.innerHTML = `
+            <p class="text-gray-600 text-sm">Coverage information not available</p>
+        `;
+            }
+        }
+        function populateSpecialFeatures(container, provider) {
+            try {
+                const features = [];
+
+                if (provider?.partnerships?.length) {
+                    features.push(`
+                <div class="mb-3">
+                    <h4 class="font-medium text-gray-900">Special Deals</h4>
+                    ${provider.partnerships.map(partnership => `
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-700">${partnership.partner}: ${partnership.benefit}</p>
+                            ${partnership.how_to_activate ?
+                            `<p class="text-sm text-gray-600">How to get: ${partnership.how_to_activate}</p>`
+                            : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `);
+                }
+
+                if (provider?.support) {
+                    features.push(`
+                <div class="mb-3">
+                    <h4 class="font-medium text-gray-900">Tourist Support</h4>
+                    <p class="text-sm text-gray-700">Hotline: ${provider.support.tourist_hotline || 'Available'}</p>
+                    <p class="text-sm text-gray-600">Hours: ${provider.support.tourist_support_hours || 'Business hours'}</p>
+                    <p class="text-sm text-gray-600">Languages: ${provider.support.languages?.join(', ') || 'English'}</p>
+                </div>
+            `);
+                }
+
+                container.innerHTML = features.join('') ||
+                    '<p class="text-gray-600 text-sm">Standard features available</p>';
+            } catch (error) {
+                console.error('Error displaying features:', error);
+                container.innerHTML = '<p class="text-gray-600 text-sm">Feature information not available</p>';
+            }
         }
 
         // Mock function to generate recommendations
@@ -491,84 +970,6 @@
         }
 
 
-        function displayRecommendations(recommendations) {
-            const container = document.getElementById('recommendationsList');
-
-            if (!recommendations || recommendations.length === 0) {
-                container.innerHTML = `
-            <div class="text-center py-8">
-                <p class="text-gray-600">No matching plans found. Try adjusting your criteria.</p>
-            </div>
-        `;
-                return;
-            }
-
-            container.innerHTML = recommendations.map((plan, index) => {
-                // Get insights for this plan
-                const insights = window.getPlanInsights(plan, formData);
-
-                // Generate insights HTML
-                const insightsHTML = insights.map(insight => `
-            <div class="flex items-start space-x-2 p-3 ${getInsightBackgroundColor(insight.type)} rounded-lg mb-2">
-                <span class="text-lg">${insight.icon}</span>
-                <p class="text-sm text-gray-700">${insight.message}</p>
-            </div>
-        `).join('');
-
-                return `
-            <div class="bg-white rounded-lg border-2 ${index === 0 ? 'border-blue-500' : 'border-gray-200'} p-6">
-                <!-- Plan Header -->
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h3 class="text-xl font-semibold">${plan.name}</h3>
-                        <p class="text-gray-600">${plan.selectedPlan.name}</p>
-                        <p class="text-sm text-gray-500">Network: ${plan.network.name}</p>
-                    </div>
-                    ${index === 0 ?
-                        `<span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-                            ${plan.recommendation}
-                        </span>` : ''}
-                </div>
-                
-                <!-- Price -->
-                <div class="flex items-baseline mb-4">
-                    <span class="text-3xl font-bold">$${plan.selectedPlan.price}</span>
-                    <span class="text-gray-600 ml-1">/month</span>
-                </div>
-                
-                <!-- Data -->
-                <div class="mb-4">
-                    <p class="font-medium">Data: ${plan.selectedPlan.data}</p>
-                </div>
-
-                <!-- Features -->
-                <div class="space-y-2 mb-4">
-                    ${plan.selectedPlan.features.map(feature => `
-                        <div class="flex items-center text-sm text-gray-600">
-                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            ${feature}
-                        </div>
-                    `).join('')}
-                </div>
-
-                <!-- Insights Section -->
-                <div class="mt-4 space-y-2">
-                    <h4 class="font-medium text-gray-900 mb-2">Plan Insights</h4>
-                    ${insightsHTML}
-                </div>
-
-                <!-- Action Button -->
-                <button class="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                    Select Plan
-                </button>
-            </div>
-        `;
-            }).join('');
-        }
-
-
         // Add some CSS for the progress indicators
         const style = document.createElement('style');
         style.textContent = `
@@ -589,6 +990,145 @@
             }
         `;
         document.head.appendChild(style);
+    </script>
+
+    <script>
+        // Usage rates in GB per hour
+        const usageRates = {
+            navigation: 0.1,
+            video: 0.7,
+            social: 0.15
+        };
+
+        // Calculate total usage and update form data
+        // Replace your existing calculateUsage function with this one
+        function calculateUsage() {
+            const duration = parseInt(document.getElementById('tripDuration').value) || 0;
+            const navigation = (parseFloat(document.getElementById('navigationHours').value) || 0) * usageRates.navigation;
+            const video = (parseFloat(document.getElementById('videoHours').value) || 0) * usageRates.video;
+            const social = (parseFloat(document.getElementById('socialHours').value) || 0) * usageRates.social;
+
+            const dailyUsage = navigation + video + social;
+            const monthlyUsage = (dailyUsage * 30).toFixed(1); // Estimate monthly usage
+
+            // Update the display
+            const usageResult = document.getElementById('usageResult');
+            usageResult.querySelector('p').textContent = `${monthlyUsage} GB`;
+
+            // Set the dataNeeds value based on calculated usage
+            let dataNeeds = '';
+            if (monthlyUsage > 100) {
+                dataNeeds = 'unlimited';
+            } else if (monthlyUsage > 30) {
+                dataNeeds = 'heavy';
+            } else if (monthlyUsage > 0) {
+                dataNeeds = 'light';
+            } else {
+                dataNeeds = 'light'; // Default to light if no usage entered
+            }
+
+            // Update both the hidden input and the formData object
+            const dataNeedsInput = document.getElementById('dataNeeds');
+            dataNeedsInput.value = dataNeeds;
+            formData.dataNeeds = dataNeeds;
+
+            console.log('Updated dataNeeds:', dataNeeds);
+            console.log('Current formData:', formData);
+
+            validateStep2();
+        }
+
+        // Replace your validateStep2 function
+        function validateStep2() {
+            // Set default plan type to "any" if none selected
+            if (!formData.planType) {
+                const anyPlanRadio = document.querySelector('input[name="planType"][value="any"]');
+                if (anyPlanRadio) {
+                    anyPlanRadio.checked = true;
+                    formData.planType = 'any';
+                }
+            }
+
+            const isValid = formData.budget &&
+                formData.planType &&
+                formData.dataNeeds &&
+                parseInt(formData.budget) > 0;
+
+            console.log('Step 2 Validation:', {
+                budget: formData.budget,
+                planType: formData.planType,
+                dataNeeds: formData.dataNeeds,
+                isValid: isValid
+            });
+
+            nextStep2.disabled = !isValid;
+            return isValid;
+        }
+
+        // Replace your validateStep3 function
+        function validateStep3() {
+            const isValid = formData.location;
+            nextStep3.disabled = !isValid;
+            console.log('Step 3 Validation:', {
+                location: formData.location,
+                isValid: isValid
+            });
+            return isValid;
+        }
+
+        // Add event listeners
+        ['tripDuration', 'navigationHours', 'videoHours', 'socialHours'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateUsage);
+        });
+
+
+    </script>
+
+
+
+    <script>
+        // Area descriptions for tourists
+        const areaDetails = {
+            cbd: {
+                description: "The bustling heart of Sydney, featuring skyscrapers, shopping districts, and major tourist attractions. This area has excellent coverage and is well-connected by public transport.",
+                spots: "Notable spots: Sydney Opera House, Harbour Bridge, The Rocks, Circular Quay, Pitt Street Mall"
+            },
+            inner: {
+                description: "A vibrant area surrounding the city centre, known for its cafe culture, boutique shopping, and nightlife. These trendy neighborhoods are popular with young professionals and tourists.",
+                spots: "Notable spots: Surry Hills cafes, Newtown's King Street, Glebe Markets, Chippendale's galleries"
+            },
+            eastern: {
+                description: "Home to Sydney's famous beaches and coastal walks. This area combines beachside lifestyle with upscale neighborhoods and tourist attractions.",
+                spots: "Notable spots: Bondi Beach, Coastal Walk, Coogee Beach, Centennial Park, Westfield Bondi Junction"
+            },
+            western: {
+                description: "The greater western region of Sydney, including major business districts and shopping areas. This diverse area is more residential but includes key attractions.",
+                spots: "Notable spots: Parramatta CBD, Olympic Park, Rosehill Gardens, Westfield Parramatta"
+            },
+            northern: {
+                description: "Beautiful beaches, leafy suburbs, and shopping districts north of the harbour. Popular for its beach lifestyle and family-friendly areas.",
+                spots: "Notable spots: Manly Beach, Taronga Zoo, Chatswood Shopping, North Sydney"
+            },
+            southern: {
+                description: "Stretching from the airport to the southern beaches, this area includes both residential suburbs and tourist spots. Convenient for airport access.",
+                spots: "Notable spots: Sydney Airport, Cronulla Beach, Brighton-Le-Sands, The Royal National Park"
+            }
+        };
+
+        // Update area description when location is selected
+        document.getElementById('location').addEventListener('change', function (e) {
+            const location = e.target.value;
+            const descriptionPanel = document.getElementById('areaDescription');
+
+            if (location && areaDetails[location]) {
+                // Show and update description
+                descriptionPanel.classList.remove('hidden');
+                document.getElementById('areaDetail').textContent = areaDetails[location].description;
+                document.getElementById('areaTouristSpots').textContent = areaDetails[location].spots;
+            } else {
+                descriptionPanel.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 
