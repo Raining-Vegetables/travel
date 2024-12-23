@@ -1,3 +1,10 @@
+<?php
+// controllers/RecommendationController.php
+require_once 'config/access-db.php';
+require_once 'config/config.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,7 +36,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8TD7ZWF6Q"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'G-T8TD7ZWF6Q', {
@@ -116,9 +126,17 @@
                             </ul>
                         </div>
 
+                        <?php if (isset($_SESSION['error'])): ?>
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                                <?php
+                                echo htmlspecialchars($_SESSION['error']);
+                                unset($_SESSION['error']);
+                                ?>
+                            </div>
+                        <?php endif; ?>
 
 
-                        <form action="recommendations.html" method="GET" class="space-y-8" id="planFinderForm">
+                        <form action="controllers/RecommendationController.php" method="GET" class="space-y-8" id="planFinderForm">
 
                             <!-- Add this near the top of your form section -->
                             <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
@@ -132,7 +150,7 @@
                                 <label for="usage" class="text-sm font-semibold text-gray-800">
                                     What will you mainly use your phone for in Sydney?
                                 </label>
-                                <select id="usage" name="usage"
+                                <select id="usage" name="usage_type"
                                     class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:bg-white transition-all duration-200">
                                     <option value="">Select usage type...</option>
                                     <option value="basic">Basic (Maps & messaging) - About 1GB/week</option>
@@ -154,14 +172,14 @@
                                         Not sure?
                                     </button>
                                 </label>
-                                <select id="location" name="location"
+                                <select id="location" name="area"
                                     class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:bg-white transition-all duration-200">
                                     <option value="">Select location...</option>
                                     <option value="eastern">Eastern Suburbs (Bondi, Coogee, etc.)</option>
                                     <option value="city">City & Inner West</option>
                                     <option value="northern">Northern Beaches</option>
                                     <option value="western">Western Sydney</option>
-                                    <option value="south">South Sydney</option>
+                                    <option value="southern">South Sydney</option>
                                 </select>
                             </div>
 
@@ -170,7 +188,7 @@
                                 <label for="duration" class="text-sm font-semibold text-gray-800">
                                     How long are you staying in Sydney?
                                 </label>
-                                <select id="duration" name="duration"
+                                <select id="duration_days" name="duration_days"
                                     class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:bg-white transition-all duration-200">
                                     <option value="">Select duration...</option>
                                     <option value="short">Less than 2 weeks</option>
@@ -270,7 +288,11 @@
                 const currentSession = sessionStorage.getItem(sessionKey);
 
                 let storedData = localStorage.getItem('visitorCount');
-                let data = storedData ? JSON.parse(storedData) : { date: today, count: 0, baseCount: 15 };
+                let data = storedData ? JSON.parse(storedData) : {
+                    date: today,
+                    count: 0,
+                    baseCount: 15
+                };
 
                 // Reset if it's a new day
                 if (data.date !== today) {
@@ -305,7 +327,7 @@
         }
 
         // Enhanced form submission tracking
-        document.getElementById('planFinderForm').addEventListener('submit', function (e) {
+        document.getElementById('planFinderForm').addEventListener('submit', function(e) {
             const usage = document.getElementById('usage').value;
             const location = document.getElementById('location').value;
             const duration = document.getElementById('duration').value;
@@ -327,7 +349,7 @@
         });
 
         // Track location help clicks
-        document.querySelector('button[onclick]').addEventListener('click', function () {
+        document.querySelector('button[onclick]').addEventListener('click', function() {
             gtag('event', 'location_help_click', {
                 'event_category': 'engagement',
                 'event_label': 'location_guide',
@@ -337,7 +359,7 @@
 
         // Track dropdown selections
         ['usage', 'location', 'duration'].forEach(fieldId => {
-            document.getElementById(fieldId).addEventListener('change', function (e) {
+            document.getElementById(fieldId).addEventListener('change', function(e) {
                 gtag('event', 'field_selection', {
                     'event_category': 'form_interaction',
                     'event_label': fieldId,
@@ -347,13 +369,13 @@
         });
 
         // Initialize visitor counter on page load
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             updateVisitorCount();
         });
 
         // Track time spent on page
         let startTime = new Date();
-        window.addEventListener('beforeunload', function () {
+        window.addEventListener('beforeunload', function() {
             const endTime = new Date();
             const timeSpent = Math.round((endTime - startTime) / 1000);
 

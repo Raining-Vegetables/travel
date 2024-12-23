@@ -1,0 +1,40 @@
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore compiled files
+*.o
+*.out
+*.class
+*.exe
+
+# Ignore node_modules (for Node.js projects)
+node_modules/
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore environment variables files
+.env
+
+# Ignore coverage reports
+coverage/
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore other files or directories
+config/access-db.php
+
+uploads/
