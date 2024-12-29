@@ -61,10 +61,10 @@ require_once 'config/config.php';
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-blue-600">SydneyBuddy</span>
                 </div>
-                <div class="flex space-x-4 text-sm">
+                <!-- <div class="flex space-x-4 text-sm">
                     <a href="#how-it-works" class="text-gray-600 hover:text-gray-900">How It Works</a>
                     <a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>
@@ -138,13 +138,7 @@ require_once 'config/config.php';
 
                         <form action="controllers/RecommendationController.php" method="GET" class="space-y-8" id="planFinderForm">
 
-                            <!-- Add this near the top of your form section -->
-                            <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                                <div class="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full">
-                                    <span class="h-2 w-2 bg-green-500 rounded-full mr-2"></span>
-                                    <span id="visitorCount">Loading...</span>&nbsp; people finding plans today
-                                </div>
-                            </div>
+
                             <!-- Usage Pattern -->
                             <div class="space-y-2">
                                 <label for="usage" class="text-sm font-semibold text-gray-800">
@@ -263,13 +257,13 @@ require_once 'config/config.php';
 
             <!-- Quick Links -->
             <div class="flex justify-center space-x-6 mb-8">
-                <a href="about.html" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+                <a href="about.php" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
                 <span class="text-gray-300">|</span>
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                <!-- <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                <span class="text-gray-300">|</span> -->
+                <a href="privacy.php" class="text-gray-600 hover:text-blue-600 transition-colors">Privacy</a>
                 <span class="text-gray-300">|</span>
-                <a href="privacy.html" class="text-gray-600 hover:text-blue-600 transition-colors">Privacy</a>
-                <span class="text-gray-300">|</span>
-                <a href="terms.html" class="text-gray-600 hover:text-blue-600 transition-colors">Terms</a>
+                <a href="terms.php" class="text-gray-600 hover:text-blue-600 transition-colors">Terms</a>
             </div>
 
             <!-- Contact -->
@@ -281,51 +275,6 @@ require_once 'config/config.php';
     </footer>
 
     <script>
-        async function updateVisitorCount() {
-            try {
-                const today = new Date().toISOString().split('T')[0];
-                const sessionKey = 'visitorSession';
-                const currentSession = sessionStorage.getItem(sessionKey);
-
-                let storedData = localStorage.getItem('visitorCount');
-                let data = storedData ? JSON.parse(storedData) : {
-                    date: today,
-                    count: 0,
-                    baseCount: 15
-                };
-
-                // Reset if it's a new day
-                if (data.date !== today) {
-                    const baseIncrement = Math.floor(Math.random() * 5) + 1;
-                    data = {
-                        date: today,
-                        count: 0,
-                        baseCount: data.baseCount + baseIncrement
-                    };
-                }
-
-                // Only increment if it's a new session
-                if (!currentSession) {
-                    sessionStorage.setItem(sessionKey, today);
-                    data.count++;
-                    localStorage.setItem('visitorCount', JSON.stringify(data));
-                }
-
-                const displayCount = data.baseCount + data.count;
-                document.getElementById('visitorCount').textContent = `${displayCount}`;
-
-                // Track visitor count in GA4
-                gtag('event', 'visitor_count_updated', {
-                    'event_category': 'engagement',
-                    'event_label': 'visitor_counter',
-                    'value': displayCount
-                });
-            } catch (error) {
-                console.error('Error updating visitor count:', error);
-                document.getElementById('visitorCount').textContent = '15'; // Fallback count
-            }
-        }
-
         // Enhanced form submission tracking
         document.getElementById('planFinderForm').addEventListener('submit', function(e) {
             const usage = document.getElementById('usage').value;
@@ -368,10 +317,6 @@ require_once 'config/config.php';
             });
         });
 
-        // Initialize visitor counter on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateVisitorCount();
-        });
 
         // Track time spent on page
         let startTime = new Date();

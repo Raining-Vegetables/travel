@@ -21,11 +21,10 @@
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
-                    <a href="index.html" class="text-2xl font-bold text-blue-600">SydneyBuddy</a>
+                    <a href="index.php" class="text-2xl font-bold text-blue-600">SydneyBuddy</a>
                 </div>
                 <div class="flex space-x-4 text-sm">
-                    <a href="about.html" class="text-blue-600">About</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-gray-900">Contact</a>
+                    <a href="about.php" class="text-blue-600">About</a>
                 </div>
             </div>
         </div>
@@ -82,7 +81,7 @@
                                 <h3 class="text-lg font-semibold text-gray-900 mb-2">The Money-Saving Discovery</h3>
                                 <p class="text-gray-600 leading-relaxed">
                                     Later, we discovered we could get the <span class="text-green-600 font-medium">exact
-                                        same Telstra network
+                                        same Telstra network for our basic needs
                                         through providers like More Telecom for just $20</span>. That's when we realized
                                     how many tourists were
                                     probably making the same expensive mistake we did.
@@ -239,13 +238,13 @@
     <footer class="bg-white border-t mt-12">
         <div class="max-w-6xl mx-auto px-4 py-12">
             <div class="flex justify-center space-x-6">
-                <a href="about.html" class="text-gray-600 hover:text-blue-600">About</a>
+                <a href="about.php" class="text-gray-600 hover:text-blue-600">About</a>
                 <span class="text-gray-300">|</span>
-                <!-- <a href="contact.html" class="text-gray-600 hover:text-blue-600">Contact</a>
+                <!-- <a href="contact.php" class="text-gray-600 hover:text-blue-600">Contact</a>
                 <span class="text-gray-300">|</span> -->
-                <a href="privacy.html" class="text-gray-600 hover:text-blue-600">Privacy</a>
+                <a href="privacy.php" class="text-gray-600 hover:text-blue-600">Privacy</a>
                 <span class="text-gray-300">|</span>
-                <a href="terms.html" class="text-gray-600 hover:text-blue-600">Terms</a>
+                <a href="terms.php" class="text-gray-600 hover:text-blue-600">Terms</a>
             </div>
             <div class="text-center text-sm text-gray-500 mt-4">
                 © 2024 SydneyBuddy. All rights reserved.

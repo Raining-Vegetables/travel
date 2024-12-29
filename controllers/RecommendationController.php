@@ -97,6 +97,11 @@ try {
 
     error_log("Final formatted recommendations: " . print_r($formatted_recommendations, true), 3, "errors.log");
 
+    if (!$raw_recommendations['recommended']) {
+        $_SESSION['error'] = 'We couldn\'t find an exact match for your criteria, but here are some close alternatives that might work for you.';
+        // Try with relaxed criteria...
+    }
+
     // Store in session with correct structure
     $_SESSION['recommendation_data'] = [
         'recommendations' => $formatted_recommendations,
@@ -106,6 +111,7 @@ try {
             'usage_type' => $params['usage_type']
         ]
     ];
+
 
     // Redirect to recommendations view
     header('Location: ../views/recommendations.php');
