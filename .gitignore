@@ -38,3 +38,6 @@ coverage/
 config/access-db.php
 
 uploads/
+
+.env
+vendor/

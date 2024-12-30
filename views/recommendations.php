@@ -307,10 +307,90 @@ function formatDataUsage($data_amount)
             </div>
         </div>
 
+        <!-- AI Enhanced Insights -->
+        <!-- AI Enhanced Insights -->
+        <?php if (isset($data['recommendations']['ai_insights']) && !empty($data['recommendations']['ai_insights'])): ?>
+            <?php $insights = $data['recommendations']['ai_insights']; ?>
+            <div class="mt-8">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Smart Insights for Your Stay</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Location Tips -->
+                        <?php if (!empty($insights['locationTips'])): ?>
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-gray-800">Location-Specific Tips</h4>
+                                <ul class="space-y-2">
+                                    <?php foreach ($insights['locationTips'] as $tip): ?>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            </svg>
+                                            <span class="text-gray-700"><?php echo htmlspecialchars($tip); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Usage Advice -->
+                        <?php if (!empty($insights['usageAdvice'])): ?>
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-gray-800">Usage Tips</h4>
+                                <ul class="space-y-2">
+                                    <?php foreach ($insights['usageAdvice'] as $advice): ?>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-green-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="text-gray-700"><?php echo htmlspecialchars($advice); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Money Saving Tips -->
+                        <?php if (!empty($insights['savingTips'])): ?>
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-gray-800">Money-Saving Tips</h4>
+                                <ul class="space-y-2">
+                                    <?php foreach ($insights['savingTips'] as $tip): ?>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-amber-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="text-gray-700"><?php echo htmlspecialchars($tip); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Warnings -->
+                        <?php if (!empty($insights['warnings'])): ?>
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-gray-800">Important Notes</h4>
+                                <ul class="space-y-2">
+                                    <?php foreach ($insights['warnings'] as $warning): ?>
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-red-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            <span class="text-gray-700"><?php echo htmlspecialchars($warning); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <!-- Alternative Options -->
         <div class="grid md:grid-cols-2 gap-6">
             <!-- Budget Option -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="p-6">
                     <div class="text-sm font-medium text-gray-600 mb-1">SAVE MONEY WITH</div>
                     <h3 class="text-xl font-semibold mb-2">
@@ -342,10 +422,10 @@ function formatDataUsage($data_amount)
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Premium Option -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="p-6">
                     <div class="text-sm font-medium text-purple-600 mb-1">PREMIUM EXPERIENCE</div>
                     <h3 class="text-xl font-semibold mb-2">
@@ -383,7 +463,7 @@ function formatDataUsage($data_amount)
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- Save Options -->

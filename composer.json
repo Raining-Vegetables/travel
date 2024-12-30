@@ -1,0 +1,23 @@
+{
+    "name": "sydneybuddy/tourist-help",
+    "description": "A system to help tourists settle in sydney",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "mercy",
+            "email": "kesamercy@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "vlucas/phpdotenv": "5.6.x-dev",
+        "guzzlehttp/guzzle": "8.0.x-dev",
+        "openai-php/client": "dev-main"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
