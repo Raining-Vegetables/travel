@@ -1,9 +1,9 @@
 <?php
 // controllers/RecommendationController.php
 
-require_once '../config/access-db.php';
-require_once '../config/config.php';
-require_once '../services/AiService.php';
+require_once __DIR__ . '/../config/access-db.php';
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../services/AiService.php';
 
 class RecommendationController
 {

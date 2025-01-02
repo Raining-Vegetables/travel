@@ -136,7 +136,7 @@ require_once 'config/config.php';
                         <?php endif; ?>
 
 
-                        <form action="controllers/RecommendationController.php" method="GET" class="space-y-8" id="planFinderForm">
+                        <form action="/travel/controllers/RecommendationController.php" method="GET" class="space-y-8" id="planFinderForm">
 
 
                             <!-- Usage Pattern -->
