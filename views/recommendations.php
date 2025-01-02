@@ -15,7 +15,6 @@ $plans = [
 ];
 $usage_context = $data['recommendations']['usage_context'];
 
-// Helper function to format plan features nicely
 function formatDataUsage($data_amount)
 {
     if (strpos(strtolower($data_amount), 'unlimited') !== false) {
@@ -23,7 +22,6 @@ function formatDataUsage($data_amount)
     }
     return $data_amount;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +31,6 @@ function formatDataUsage($data_amount)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfect Phone Plan for Your Sydney Stay</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8TD7ZWF6Q"></script>
     <script>
@@ -48,462 +45,448 @@ function formatDataUsage($data_amount)
 </head>
 
 <body class="bg-gray-50">
-    <!-- Navigation -->
-    <?php include 'partials/nav.php'; ?>
-
-    <!-- Navigation -->
-    <?php include 'partials/nav.php'; ?>
-
-    <!-- Header Section -->
-    <div class="bg-gradient-to-b from-blue-50/50 to-white border-b">
+    <!-- Sticky Header -->
+    <header class="sticky top-0 bg-white border-b z-10">
         <div class="max-w-4xl mx-auto px-4">
-            <!-- Back Button -->
-            <div class="py-4">
-                <a href="../index.php" class="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium">
+            <div class="flex items-center justify-between h-16">
+                <a href="../index.php" class="flex items-center text-gray-600 hover:text-blue-600">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                    Back to Search
+                    <span class="text-sm font-medium">Back to Search</span>
                 </a>
+                <div class="flex items-center gap-3">
+                    <button onclick="copyToClipboard()" class="text-sm text-blue-600 hover:underline">Share</button>
+                    <button onclick="saveOption('email')" class="px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700">
+                        Save Plan
+                    </button>
+                </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Title and Summary -->
-            <div class="py-8">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Your Perfect Sydney Phone Plan</h1>
-                <p class="mt-2 text-gray-600">Customized recommendations based on your needs</p>
-            </div>
-
-            <!-- Stay Details Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8">
-                <!-- Location Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                    <div class="flex items-start gap-3">
-                        <div class="p-2 bg-blue-50 rounded-lg">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Location</p>
-                            <h3 class="font-semibold text-gray-900"><?php echo ucfirst($data['search_params']['area']); ?> Sydney</h3>
-                        </div>
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- User Requirements Summary -->
+        <div class="bg-blue-50 rounded-xl p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Your Requirements</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex items-start space-x-3">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Location</p>
+                        <p class="font-medium"><?php echo htmlspecialchars($usage_context['location']); ?></p>
                     </div>
                 </div>
 
-                <!-- Usage Type Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                    <div class="flex items-start gap-3">
-                        <div class="p-2 bg-blue-50 rounded-lg">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Usage Type</p>
-                            <h3 class="font-semibold text-gray-900"><?php echo $usage_context['description']; ?></h3>
-                        </div>
+                <div class="flex items-start space-x-3">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Length of Stay</p>
+                        <p class="font-medium"><?php echo htmlspecialchars($usage_context['duration']); ?></p>
                     </div>
                 </div>
 
-                <!-- Duration Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                    <div class="flex items-start gap-3">
-                        <div class="p-2 bg-blue-50 rounded-lg">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">Duration</p>
-                            <h3 class="font-semibold text-gray-900"><?php echo $data['search_params']['duration_days']; ?> days</h3>
-                        </div>
+                <div class="flex items-start space-x-3">
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Data Usage</p>
+                        <p class="font-medium"><?php echo htmlspecialchars($usage_context['usage_type']); ?></p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Recommendations -->
-    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Plan Navigation -->
+        <div class="flex space-x-4 mb-6">
+            <?php foreach ($plans as $key => $plan): ?>
+                <button
+                    onclick="switchTab('<?php echo $key; ?>')"
+                    class="tab-button px-4 py-2 rounded-lg font-medium <?php echo $key === 'recommended' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'; ?>"
+                    data-tab="<?php echo $key; ?>">
+                    <?php echo ucfirst($key); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
 
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                <?php
-                echo htmlspecialchars($_SESSION['error']);
-                unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
-        <!-- Best Match Plan -->
-        <div class="mb-8">
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-500">
-                <div class="bg-blue-500 px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="text-white/90 text-sm font-medium">RECOMMENDED FOR YOU</div>
-                            <h2 class="text-2xl font-bold text-white">
-                                $<?php echo number_format($plans['recommended']['price'], 2); ?> - <?php echo htmlspecialchars($plans['recommended']['carrier_name']); ?>
-                            </h2>
-                            <p class="text-white/80 text-sm mt-1"><?php echo formatDataUsage($plans['recommended']['data_amount']); ?></p>
+        <!-- Plan Details (One for each plan type) -->
+        <?php foreach ($plans as $key => $plan): ?>
+            <div class="plan-content <?php echo $key !== 'recommended' ? 'hidden' : ''; ?>" data-tab-content="<?php echo $key; ?>">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <!-- Plan Header -->
+                    <div class="p-6 border-b">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <div class="text-sm font-medium text-blue-600 mb-1">
+                                    <?php echo strtoupper($key); ?> PLAN
+                                </div>
+                                <h1 class="text-2xl font-bold text-gray-900">
+                                    $<?php echo number_format($plan['price'], 2); ?> -
+                                    <?php echo htmlspecialchars($plan['carrier_name']); ?>
+                                </h1>
+                                <p class="text-gray-600 mt-1"><?php echo formatDataUsage($plan['data_amount']); ?></p>
+                            </div>
+                            <?php if ($key === 'recommended'): ?>
+                                <div class="bg-green-50 text-green-700 text-sm font-medium px-3 py-1 rounded-full">
+                                    Best Match
+                                </div>
+                            <?php endif; ?>
                         </div>
-                        <div class="bg-white text-blue-500 px-4 py-1 rounded-full font-medium">Best Match</div>
-                    </div>
-                </div>
 
-                <div class="p-6">
-                    <!-- Perfect For Section -->
-                    <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-500 mb-2">PERFECT FOR</h3>
-                        <p class="text-lg">Your <?php echo $data['search_params']['duration_days']; ?>-day stay in <?php echo ucfirst($data['search_params']['area']); ?> with <?php echo $usage_context['description']; ?></p>
-                    </div>
-
-                    <!-- Why This Plan Section -->
-                    <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-500 mb-2">WHY THIS PLAN</h3>
-                        <ul class="space-y-3">
-                            <?php foreach ($plans['recommended']['reasons'] as $reason): ?>
-                                <li class="flex items-start gap-2">
-                                    <svg class="w-5 h-5 text-green-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span><?php echo htmlspecialchars($reason); ?></span>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-
-
-
-                    <!-- What You Need Section -->
-                    <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-500 mb-2">WHAT YOU NEED</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
-                                </svg>
-                                <span>Your passport</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                </svg>
-                                <span>Payment method (they accept international cards)</span>
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
-                                <span>Unlocked phone (<button class="text-blue-600 hover:underline" onclick="showUnlockGuide()">check here</button>)</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Get It Here Section -->
-                    <?php if (!empty($plans['recommended']['stores'])): ?>
-                        <?php $store = $plans['recommended']['stores'][0]; ?>
+                        <!-- Plan Explanation -->
                         <div class="mb-6">
-                            <h3 class="font-medium text-sm text-gray-500 mb-2">GET IT HERE</h3>
-                            <div class="bg-blue-50 rounded-lg p-4">
-                                <div class="flex items-start gap-3">
-                                    <div class="bg-blue-100 p-2 rounded-lg">
-                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="font-medium text-gray-900 mb-2">
+                                    <?php
+                                    switch ($key) {
+                                        case 'recommended':
+                                            echo "Why We Recommend This Plan";
+                                            break;
+                                        case 'budget':
+                                            echo "About This Budget Option";
+                                            break;
+                                        case 'premium':
+                                            echo "About This Premium Option";
+                                            break;
+                                    }
+                                    ?>
+                                </h3>
+                                <p class="text-gray-600">
+                                    <?php echo htmlspecialchars($plan['plan_explanation']); ?>
+                                </p>
+
+                                <?php if (!empty($plan['reasoning'])): ?>
+                                    <div class="mt-4 space-y-2">
+                                        <?php foreach ($plan['reasoning'] as $reason): ?>
+                                            <div class="flex items-start gap-2">
+                                                <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span class="text-sm text-gray-600"><?php echo htmlspecialchars($reason); ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- Plan Features -->
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-3">Plan Features</h3>
+                            <ul class="space-y-2">
+                                <?php foreach ($plan['features'] as $feature): ?>
+                                    <li class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
+                                        <span><?php echo htmlspecialchars($feature); ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Coverage Details -->
+                    <div class="p-6 border-b">
+                        <h3 class="font-medium mb-4">Coverage Details</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="text-sm text-gray-500">Network Speed</span>
+                                <p class="font-medium"><?php echo $plan['data_speed_min']; ?>-<?php echo $plan['data_speed_max']; ?> Mbps</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="text-sm text-gray-500">Coverage Rating</span>
+                                <p class="font-medium"><?php echo $plan['coverage_rating']; ?>/5.0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- How to Get This Plan Section -->
+                    <?php if (!empty($plan['stores'])): ?>
+                        <button
+                            onclick="toggleInstructions('<?php echo $key; ?>')"
+                            class="w-full px-6 py-3 flex items-center justify-between border-b hover:bg-gray-50"
+                            data-instructions="<?php echo $key; ?>">
+                            <span class="font-medium">How to Get This Plan</span>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform instructions-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <!-- Instructions Content -->
+                        <div class="hidden instructions-content" data-instructions-content="<?php echo $key; ?>">
+                            <div class="space-y-6 bg-gray-50 p-6">
+                                <!-- Store Details -->
+                                <?php $store = $plan['stores'][0]; ?>
+                                <div class="bg-white rounded-lg p-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-100 p-2 rounded-lg">
+                                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium"><?php echo htmlspecialchars($store['name']); ?></h4>
+                                            <?php
+                                            $hours = is_string($store['hours']) ? json_decode($store['hours'], true) : $store['hours'];
+                                            if (is_array($hours)):
+                                            ?>
+                                                <p class="text-sm text-gray-600 mt-1">
+                                                    Store hours: <?php echo isset($hours['weekday']) ? htmlspecialchars($hours['weekday']) : '9AM-6PM'; ?>
+                                                </p>
+                                            <?php endif; ?>
+                                            <button onclick="showDirections('<?php echo htmlspecialchars($store['address']); ?>')"
+                                                class="text-blue-600 text-sm hover:underline mt-2 flex items-center gap-1">
+                                                Get directions →
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="font-medium"><?php echo htmlspecialchars($store['name']); ?></p>
-                                        <p class="text-sm text-gray-600"><?php echo htmlspecialchars($store['address']); ?></p>
-                                        <?php
-                                        $hours = is_string($store['hours']) ? json_decode($store['hours'], true) : $store['hours'];
-                                        if (is_array($hours)):
-                                        ?>
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                Open: <?php echo isset($hours['weekday']) ? htmlspecialchars($hours['weekday']) : '9AM-6PM'; ?>
-                                            </p>
-                                        <?php endif; ?>
-                                        <button onclick="showDirections('<?php echo htmlspecialchars($store['address']); ?>')"
-                                            class="mt-2 text-blue-600 text-sm hover:underline">
-                                            Show me how to get there →
-                                        </button>
+                                </div>
+
+                                <!-- Phone Unlock Check -->
+                                <div class="bg-blue-50 rounded-lg p-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-blue-100 p-2 rounded-lg">
+                                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Ensure Your Phone is Unlocked</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Your phone must be unlocked to use this plan. Click below to learn how to check.</p>
+                                            <button onclick="showUnlockGuide()"
+                                                class="mt-2 text-blue-600 text-sm hover:underline flex items-center gap-1">
+                                                How to check if your phone is unlocked →
+                                            </button>
+                                        </div>
                                     </div>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <!-- What to Bring -->
+                                    <div class="bg-white rounded-lg p-4">
+                                        <h4 class="font-medium mb-2">What to Bring:</h4>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span>Cash or card (they accept international cards)</span>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span>Photo ID (passport works)</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Setup Info -->
+                                    <div class="bg-white rounded-lg p-4">
+                                        <h4 class="font-medium mb-2">Setup Information:</h4>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>Takes about 15-20 minutes</span>
+                                            </li>
+                                            <li class="flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span>Staff will help you activate</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Help & Support -->
+                                    <div class="bg-white rounded-lg p-4">
+                                        <h4 class="font-medium mb-2">If You Need Help Later:</h4>
+                                        <ul class="space-y-2 text-gray-600">
+                                            <li>• Check balance: Dial <?php echo htmlspecialchars($plan['support_info']['balance_check'] ?? '*100#'); ?></li>
+                                            <li>• Customer service: <?php echo htmlspecialchars($plan['support_info']['customer_service'] ?? '125 111'); ?> (free call)</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Backup Option -->
+                                    <?php if (!empty($store['backup_store'])): ?>
+                                        <div class="bg-amber-50 rounded-lg p-4">
+                                            <h4 class="font-medium mb-2">Backup Option:</h4>
+                                            <p class="text-gray-700">If store is closed, visit:</p>
+                                            <p class="font-medium mt-1"><?php echo htmlspecialchars($store['backup_store']['name']); ?></p>
+                                            <p class="text-sm text-gray-600"><?php echo htmlspecialchars($store['backup_store']['address']); ?></p>
+                                            <p class="text-sm text-gray-600">Open <?php echo htmlspecialchars($store['backup_store']['hours']); ?></p>
+                                            <button
+                                                onclick="showDirections('<?php echo htmlspecialchars($store['backup_store']['address']); ?>')"
+                                                class="text-blue-600 text-sm hover:underline mt-2 flex items-center gap-1">
+                                                Get directions →
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     <?php endif; ?>
 
-                    <!-- Important Notes -->
-                    <?php if (!empty($plans['recommended']['warnings'])): ?>
-                        <div class="mb-6">
-                            <h3 class="font-medium text-sm text-gray-500 mb-2">GOOD TO KNOW</h3>
-                            <div class="bg-amber-50 rounded-lg p-4">
-                                <ul class="space-y-2">
-                                    <?php foreach ($plans['recommended']['warnings'] as $warning): ?>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                            </svg>
-                                            <span class="text-gray-700"><?php echo htmlspecialchars($warning); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Usage Context -->
-                    <div class="mb-6">
-                        <h3 class="font-medium text-sm text-gray-500 mb-2">TYPICAL USAGE</h3>
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <ul class="space-y-2">
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span>Daily Usage: <?php echo $plans['recommended']['data_per_day']; ?></span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span>Perfect for: <?php echo $plans['recommended']['typical_activities']; ?></span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-
-                    <!-- Real World Experiences Section -->
-                    <?php if (!empty($plans['recommended']['experiences'])): ?>
-                        <div class="mb-6">
-                            <h3 class="font-medium text-sm text-gray-500 mb-2">REAL EXPERIENCES</h3>
-                            <div class="space-y-3">
-                                <?php foreach ($plans['recommended']['experiences'] as $experience): ?>
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <!-- Rating Stars -->
-                                            <div class="flex">
-                                                <?php for ($i = 0; $i < $experience['rating']; $i++): ?>
-                                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                                    </svg>
-                                                <?php endfor; ?>
+                    <!-- Honest Insights Section -->
+                    <?php if (!empty($plan['honest_insights'])): ?>
+                        <div class="p-6">
+                            <h3 class="font-medium mb-4">Honest Insights</h3>
+                            <div class="space-y-4">
+                                <?php foreach ($plan['honest_insights'] as $insight): ?>
+                                    <div class="bg-amber-50 rounded-lg p-4">
+                                        <?php if (!empty($insight['marketing_claim'])): ?>
+                                            <div class="mb-3">
+                                                <span class="text-sm text-gray-600 font-medium">What they say:</span>
+                                                <p class="text-gray-800"><?php echo htmlspecialchars($insight['marketing_claim']); ?></p>
                                             </div>
-                                            <span class="text-sm text-gray-500"><?php echo $experience['usage_period']; ?></span>
-                                        </div>
-                                        <p class="text-sm"><?php echo htmlspecialchars($experience['context']); ?></p>
-                                        <?php if (!empty($experience['pros'])): ?>
-                                            <p class="text-sm text-green-600 mt-2">✓ <?php echo htmlspecialchars($experience['pros']); ?></p>
                                         <?php endif; ?>
-                                        <?php if (!empty($experience['cons'])): ?>
-                                            <p class="text-sm text-red-600 mt-1">✗ <?php echo htmlspecialchars($experience['cons']); ?></p>
+
+                                        <?php if (!empty($insight['reality'])): ?>
+                                            <div class="mb-3">
+                                                <span class="text-sm text-gray-600 font-medium">Reality:</span>
+                                                <p class="text-gray-800"><?php echo htmlspecialchars($insight['reality']); ?></p>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($insight['recommendation'])): ?>
+                                            <div class="flex items-start gap-2 mt-2">
+                                                <svg class="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span class="text-gray-700"><?php echo htmlspecialchars($insight['recommendation']); ?></span>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                     <?php endif; ?>
-                </div>
-            </div>
-        </div>
 
-        <!-- AI Enhanced Insights -->
-        <!-- AI Enhanced Insights -->
-        <?php if (isset($data['recommendations']['ai_insights']) && !empty($data['recommendations']['ai_insights'])): ?>
-            <?php $insights = $data['recommendations']['ai_insights']; ?>
-            <div class="mt-8">
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-semibold mb-4">Smart Insights for Your Stay</h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Location Tips -->
-                        <?php if (!empty($insights['locationTips'])): ?>
-                            <div class="space-y-3">
-                                <h4 class="font-medium text-gray-800">Location-Specific Tips</h4>
-                                <ul class="space-y-2">
-                                    <?php foreach ($insights['locationTips'] as $tip): ?>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-blue-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            </svg>
-                                            <span class="text-gray-700"><?php echo htmlspecialchars($tip); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
+                    <!-- Known Coverage Issues -->
+                    <div class="p-6 border-b">
+                        <h4 class="text-sm font-medium text-gray-500 mb-3">Known Coverage Issues</h4>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <div>
+                                    <p class="font-medium mb-1">
+                                        <?php
+                                        switch ($key) {
+                                            case 'recommended':
+                                                echo "Signal drops in underground shopping centers";
+                                                break;
+                                            case 'budget':
+                                                echo "Weak signal in building basements";
+                                                break;
+                                            case 'premium':
+                                                echo "Some coverage gaps in new train tunnels";
+                                                break;
+                                        }
+                                        ?>
+                                    </p>
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        <?php
+                                        switch ($key) {
+                                            case 'recommended':
+                                                echo "Users report consistent signal loss in underground areas.";
+                                                break;
+                                            case 'budget':
+                                                echo "Coverage can be limited in underground areas and thick-walled buildings.";
+                                                break;
+                                            case 'premium':
+                                                echo "Brief connection drops possible in some tunnel sections.";
+                                                break;
+                                        }
+                                        ?>
+                                    </p>
+                                    <p class="text-sm text-blue-600">
+                                        💡 Tip: Connect to free WiFi networks in
+                                        <?php echo $key === 'premium' ? 'stations' : 'shopping centers'; ?>
+                                        when available.
+                                    </p>
+                                </div>
                             </div>
-                        <?php endif; ?>
-
-                        <!-- Usage Advice -->
-                        <?php if (!empty($insights['usageAdvice'])): ?>
-                            <div class="space-y-3">
-                                <h4 class="font-medium text-gray-800">Usage Tips</h4>
-                                <ul class="space-y-2">
-                                    <?php foreach ($insights['usageAdvice'] as $advice): ?>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-green-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <span class="text-gray-700"><?php echo htmlspecialchars($advice); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Money Saving Tips -->
-                        <?php if (!empty($insights['savingTips'])): ?>
-                            <div class="space-y-3">
-                                <h4 class="font-medium text-gray-800">Money-Saving Tips</h4>
-                                <ul class="space-y-2">
-                                    <?php foreach ($insights['savingTips'] as $tip): ?>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-amber-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <span class="text-gray-700"><?php echo htmlspecialchars($tip); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Warnings -->
-                        <?php if (!empty($insights['warnings'])): ?>
-                            <div class="space-y-3">
-                                <h4 class="font-medium text-gray-800">Important Notes</h4>
-                                <ul class="space-y-2">
-                                    <?php foreach ($insights['warnings'] as $warning): ?>
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-red-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                            </svg>
-                                            <span class="text-gray-700"><?php echo htmlspecialchars($warning); ?></span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-        <!-- Alternative Options -->
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- Budget Option -->
-            <!-- <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6">
-                    <div class="text-sm font-medium text-gray-600 mb-1">SAVE MONEY WITH</div>
-                    <h3 class="text-xl font-semibold mb-2">
-                        $<?php echo number_format($plans['budget']['price'], 2); ?> - <?php echo htmlspecialchars($plans['budget']['carrier_name']); ?>
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-4"><?php echo formatDataUsage($plans['budget']['data_amount']); ?></p>
-
-                    <div class="space-y-4">
-                        <div class="text-sm text-gray-600">
-                            Still works for your needs but:
-                            <ul class="mt-2 space-y-2">
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span>Might need to top up if you stream a lot</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span>Need to visit city store to activate</span>
-                                </li>
-                            </ul>
                         </div>
-
-                        <button onclick="showPlanDetails('budget')" class="w-full py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                            See details →
-                        </button>
                     </div>
-                </div>
-            </div> -->
-
-            <!-- Premium Option -->
-            <!-- <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6">
-                    <div class="text-sm font-medium text-purple-600 mb-1">PREMIUM EXPERIENCE</div>
-                    <h3 class="text-xl font-semibold mb-2">
-                        $<?php echo number_format($plans['premium']['price'], 2); ?> - <?php echo htmlspecialchars($plans['premium']['carrier_name']); ?>
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-4"><?php echo formatDataUsage($plans['premium']['data_amount']); ?></p>
-
-                    <div class="space-y-4">
-                        <div class="text-sm text-gray-600">
-                            Extra benefits include:
-                            <ul class="mt-2 space-y-2">
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>Unlimited data</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>Priority network access</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span>International calls included</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <button onclick="showPlanDetails('premium')" class="w-full py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                            See details →
-                        </button>
-                    </div>
-                </div>
-            </div> -->
-        </div>
-
-        <!-- Save Options -->
-        <div class="mt-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold mb-4">Save these details for later:</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <button onclick="saveOption('sms')" class="flex items-center justify-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                        📱 Send to my phone
-                    </button>
-                    <button onclick="saveOption('email')" class="flex items-center justify-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                        📧 Email to myself
-                    </button>
-                    <button onclick="saveOption('wallet')" class="flex items-center justify-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                        📲 Add to wallet
-                    </button>
-                    <button onclick="saveOption('copy')" class="flex items-center justify-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                        🔗 Copy link
-                    </button>
                 </div>
             </div>
+        <?php endforeach; ?>
+
+        <!-- Compare Plans Button -->
+        <button
+            onclick="toggleComparison()"
+            class="w-full py-3 bg-gray-100 rounded-lg text-gray-600 font-medium hover:bg-gray-200 mb-6 flex items-center justify-center">
+            <span>Compare All Plans</span>
+            <svg class="ml-2 w-5 h-5 transform transition-transform comparison-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+
+        <!-- Comparison Table -->
+        <div id="comparisonTable" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Feature</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Budget</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Recommended</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500">Premium</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">Price</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">$<?php echo number_format($plans['budget']['price'], 2); ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-500">$<?php echo number_format($plans['recommended']['price'], 2); ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-500">$<?php echo number_format($plans['premium']['price'], 2); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">Data</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo formatDataUsage($plans['budget']['data_amount']); ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo formatDataUsage($plans['recommended']['data_amount']); ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo formatDataUsage($plans['premium']['data_amount']); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">Speed</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['budget']['data_speed_min']; ?>-<?php echo $plans['budget']['data_speed_max']; ?> Mbps</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['recommended']['data_speed_min']; ?>-<?php echo $plans['recommended']['data_speed_max']; ?> Mbps</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['premium']['data_speed_min']; ?>-<?php echo $plans['premium']['data_speed_max']; ?> Mbps</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">Coverage</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['budget']['coverage_rating']; ?>/5</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['recommended']['coverage_rating']; ?>/5</td>
+                        <td class="px-6 py-4 text-sm text-gray-500"><?php echo $plans['premium']['coverage_rating']; ?>/5</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Feedback -->
+        <!-- Feedback Section -->
         <div class="mt-8 text-center">
             <p class="text-gray-600 mb-2">Was this helpful?</p>
             <div class="flex justify-center gap-4">
                 <button onclick="submitFeedback('positive')" class="text-2xl hover:scale-110 transition-transform">👍</button>
                 <button onclick="submitFeedback('negative')" class="text-2xl hover:scale-110 transition-transform">👎</button>
             </div>
-            <div id="feedbackComment" class="hidden mt-4">
-                <textarea class="w-full max-w-md mx-auto p-2 border rounded-lg"
-                    placeholder="How can we improve?"></textarea>
-                <button onclick="submitComment()"
-                    class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Submit
-                </button>
-            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Phone Unlock Guide Modal -->
     <div id="unlockGuideModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
@@ -526,25 +509,65 @@ function formatDataUsage($data_amount)
                     </li>
                 </ol>
             </div>
-            <button onclick="closeUnlockGuide()"
-                class="mt-6 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button onclick="closeUnlockGuide()" class="mt-6 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Got it
             </button>
         </div>
     </div>
 
-    <!-- Plan Details Modal -->
-    <div id="planDetailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50">
-        <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div id="planDetailsContent"></div>
-            <button onclick="closePlanDetails()"
-                class="mt-6 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Close
-            </button>
-        </div>
-    </div>
-
     <script>
+        // Instructions toggle functionality
+        function toggleInstructions(planId) {
+            const content = document.querySelector(`[data-instructions-content="${planId}"]`);
+            const button = document.querySelector(`[data-instructions="${planId}"]`);
+            const arrow = button.querySelector('.instructions-arrow');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        // Tab switching functionality
+        function switchTab(tabId) {
+            // Hide all plan content
+            document.querySelectorAll('.plan-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Show selected plan content
+            document.querySelector(`[data-tab-content="${tabId}"]`).classList.remove('hidden');
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                if (button.dataset.tab === tabId) {
+                    button.classList.remove('bg-gray-100', 'text-gray-600');
+                    button.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    button.classList.remove('bg-blue-600', 'text-white');
+                    button.classList.add('bg-gray-100', 'text-gray-600');
+                }
+            });
+        }
+
+        // Comparison table toggle
+        function toggleComparison() {
+            const table = document.getElementById('comparisonTable');
+            const arrow = document.querySelector('.comparison-arrow');
+            const isHidden = table.classList.contains('hidden');
+
+            if (isHidden) {
+                table.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                table.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
         // Save options handling
         function saveOption(type) {
             switch (type) {
@@ -600,147 +623,11 @@ function formatDataUsage($data_amount)
             document.getElementById('unlockGuideModal').classList.add('hidden');
         }
 
-        // Replace the empty showPlanDetails function with this:
-        function showPlanDetails(type) {
-            const modal = document.getElementById('planDetailsModal');
-            const content = document.getElementById('planDetailsContent');
-
-            // Get the plan data from PHP
-            let plan;
-            switch (type) {
-                case 'budget':
-                    plan = <?php echo json_encode($plans['budget']); ?>;
-                    break;
-                case 'premium':
-                    plan = <?php echo json_encode($plans['premium']); ?>;
-                    break;
-            }
-
-            // Create the content HTML
-            let html = `
-        <div class="space-y-6">
-            <div class="border-b pb-4">
-                <h3 class="text-xl font-semibold">
-                    ${type === 'budget' ? 'Budget-Friendly Option' : 'Premium Plan'} Details
-                </h3>
-                <p class="text-gray-600">$${plan.price} - ${plan.carrier_name}</p>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <h4 class="font-medium mb-2">Plan Includes:</h4>
-                    <ul class="space-y-2">
-                        <li class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>${plan.data_amount} data</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Network: ${plan.network_type}</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Speed: ${plan.data_speed_min}-${plan.data_speed_max} Mbps</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="space-y-6">
-        <!-- Coverage Details -->
-        <div>
-            <h4 class="font-medium mb-2">Coverage Details:</h4>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <span class="text-sm text-gray-500">Network Type</span>
-                        <p class="font-medium">${plan.network_type}</p>
-                    </div>
-                    <div>
-                        <span class="text-sm text-gray-500">Speed Range</span>
-                        <p class="font-medium">${plan.data_speed_min}-${plan.data_speed_max} Mbps</p>
-                    </div>
-                    <div>
-                        <span class="text-sm text-gray-500">Coverage Rating</span>
-                        <p class="font-medium">${plan.coverage_rating}/5</p>
-                    </div>
-                    <div>
-                        <span class="text-sm text-gray-500">Reliability Score</span>
-                        <p class="font-medium">${plan.reliability_score}/10</p>
-                    </div>
-                </div>
-                ${plan.peak_hour_impact === 'significant' ? `
-                    <div class="mt-4 text-amber-600 text-sm">
-                        ⚠️ Network may be slower during peak hours (6-8pm)
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-
-                ${plan.warnings && plan.warnings.length ? `
-                    <div>
-                        <h4 class="font-medium mb-2">Important Notes:</h4>
-                        <ul class="space-y-2">
-                            ${plan.warnings.map(warning => `
-                                <li class="flex items-start gap-2">
-                                    <svg class="w-5 h-5 text-amber-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                    <span>${warning}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                ` : ''}
-
-                ${plan.experiences && plan.experiences.length ? `
-                    <div>
-                        <h4 class="font-medium mb-2">User Experiences:</h4>
-                        ${plan.experiences.map(exp => `
-                            <div class="border-t pt-4">
-                                <div class="text-sm text-gray-600">${exp.title}</div>
-                                <div class="mt-1">${exp.context}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-    `;
-
-            content.innerHTML = html;
-            modal.classList.remove('hidden');
-        }
-
-        function closePlanDetails() {
-            document.getElementById('planDetailsModal').classList.add('hidden');
-        }
-
         // Feedback handling
         function submitFeedback(type) {
-            const commentSection = document.getElementById('feedbackComment');
-            if (type === 'negative') {
-                commentSection.classList.remove('hidden');
-            } else {
-                alert('Thanks for your feedback!');
-            }
+            alert(`Thank you for your ${type} feedback!`);
         }
 
-        function submitComment() {
-            const comment = document.querySelector('#feedbackComment textarea').value;
-            if (comment) {
-                // TODO: Implement feedback submission
-                alert('Thank you for your feedback!');
-                document.getElementById('feedbackComment').classList.add('hidden');
-            }
-        }
-
-        // Directions handling
         function showDirections(address) {
             const encodedAddress = encodeURIComponent(address + ', Sydney, Australia');
             window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');

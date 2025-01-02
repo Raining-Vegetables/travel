@@ -1,149 +1,274 @@
 <?php
+// controllers/RecommendationController.php
+
 require_once '../config/access-db.php';
 require_once '../config/config.php';
-require_once '../models/PlanModel.php';
 require_once '../services/AiService.php';
 
-// Enable all error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+class RecommendationController
+{
+    private $conn;
+    private $aiService;
 
-// Start session if not already started
+    public function __construct($conn)
+    {
+        $this->conn = $conn;
+        $this->aiService = new AiService();
+    }
+
+    public function processRequest()
+    {
+        try {
+            error_log("Starting recommendation process", 3, "errors.log");
+
+            // Validate and get parameters
+            $params = $this->validateParameters();
+
+            // 1. Get AI Recommendations
+            error_log("Getting AI recommendations...", 3, "errors.log");
+            $aiRecommendations = $this->aiService->getRecommendation($params);
+            error_log("AI recommendations received: " . print_r($aiRecommendations, true), 3, "errors.log");
+
+            if (!$aiRecommendations) {
+                throw new Exception("Failed to get AI recommendations");
+            }
+
+            // 2. Enrich recommendations with database information
+            $enrichedRecommendations = $this->enrichRecommendations($aiRecommendations, $params);
+            error_log("Enriched recommendations: " . print_r($enrichedRecommendations, true), 3, "errors.log");
+
+            // 3. Store in session and redirect
+            $this->storeAndRedirect($enrichedRecommendations, $params);
+        } catch (Exception $e) {
+            error_log("Controller error: " . $e->getMessage(), 3, "errors.log");
+            error_log("Stack trace: " . $e->getTraceAsString(), 3, "errors.log");
+            $_SESSION['error'] = 'An error occurred while processing your request. Please try again.';
+            header('Location: ../index.php');
+            exit;
+        }
+    }
+
+    private function validateParameters()
+    {
+        $params = [
+            'area' => $_GET['area'] ?? null,
+            'usage_type' => $_GET['usage_type'] ?? null,
+            'duration_days' => $_GET['duration_days'] ?? null
+        ];
+
+        foreach ($params as $key => $value) {
+            if (!$value) {
+                throw new Exception("Missing required parameter: {$key}");
+            }
+        }
+
+        return $params;
+    }
+
+    private function enrichRecommendations($aiRecommendations, $params)
+    {
+        error_log("Starting enrichment process", 3, "errors.log");
+        $enriched = [];
+
+        foreach (['recommended', 'budget', 'premium'] as $type) {
+            if (isset($aiRecommendations[$type])) {
+                try {
+                    error_log("Enriching $type plan", 3, "errors.log");
+                    $plan = $aiRecommendations[$type];
+
+                    // Start with the AI recommendation data
+                    $enriched[$type] = $plan;
+
+                    // Add required fields that the view expects
+                    $enriched[$type]['carrier_name'] = $plan['carrier'];
+                    $enriched[$type]['plan_explanation'] = $this->formatPlanReasoning($plan['reasoning'], $type); // Add this line
+                    $enriched[$type]['features'] = [
+                        "No Lock-in Contract",
+                        "Instant Activation",
+                        $plan['data_amount'] . " Data",
+                        "Australian Mobile Number"
+                    ];
+
+                    // Try to get additional data from database
+                    try {
+                        $carrierId = $this->getCarrierId($plan['carrier']);
+                        if ($carrierId) {
+                            $coverageDetails = $this->getCoverageDetails($carrierId, $params['area']);
+                            $stores = $this->getNearbyStores($carrierId, $params['area']);
+                            $honestInsights = $this->getHonestInsights($carrierId, $params['area']);
+
+                            // Add database info if available
+                            $enriched[$type] = array_merge($enriched[$type], [
+                                'stores' => $stores,
+                                'data_speed_min' => $coverageDetails['data_speed_min'] ?? 25,
+                                'data_speed_max' => $coverageDetails['data_speed_max'] ?? 100,
+                                'coverage_rating' => $coverageDetails['rating'] ?? 4.0,
+                                'honest_insights' => $honestInsights,
+                                'support_info' => $this->getSupportInfo($carrierId)
+                            ]);
+                        }
+                    } catch (Exception $e) {
+                        error_log("Database enrichment failed for $type plan: " . $e->getMessage(), 3, "errors.log");
+                        // Add fallback values if database operations fail
+                        $enriched[$type] = array_merge($enriched[$type], [
+                            'stores' => [],
+                            'data_speed_min' => 25,
+                            'data_speed_max' => 100,
+                            'coverage_rating' => 4.0,
+                            'honest_insights' => [],
+                            'support_info' => [
+                                'balance_check' => '*100#',
+                                'customer_service' => '1300 000 000'
+                            ]
+                        ]);
+                    }
+                } catch (Exception $e) {
+                    error_log("Error enriching $type plan: " . $e->getMessage(), 3, "errors.log");
+                }
+            }
+        }
+
+        return $enriched;
+    }
+
+    private function getCarrierId($carrierName)
+    {
+        $stmt = $this->conn->prepare("SELECT id FROM carriers WHERE LOWER(name) LIKE LOWER(?)");
+        $carrierPattern = '%' . $carrierName . '%';
+        $stmt->bind_param("s", $carrierPattern);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $carrier = $result->fetch_assoc();
+        return $carrier ? $carrier['id'] : null;
+    }
+
+    private function getCoverageDetails($carrierId, $area)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT rating, data_speed_min, data_speed_max
+            FROM coverage 
+            WHERE carrier_id = ? AND area_type = ?
+        ");
+        $stmt->bind_param("is", $carrierId, $area);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    private function getNearbyStores($carrierId, $area)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT * FROM stores 
+            WHERE carrier_id = ? AND area_type = ? AND status = 'active'
+            LIMIT 2
+        ");
+        $stmt->bind_param("is", $carrierId, $area);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    private function getHonestInsights($carrierId, $area)
+    {
+        $stmt = $this->conn->prepare("
+            SELECT insight_type, marketing_claim, reality, recommendation
+            FROM honest_insights 
+            WHERE carrier_id = ? AND area_type = ?
+            LIMIT 2
+        ");
+        $stmt->bind_param("is", $carrierId, $area);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    private function getSupportInfo($carrierId)
+    {
+        if (!$carrierId) {
+            return [
+                'balance_check' => '*100#',
+                'customer_service' => '1300 000 000'
+            ];
+        }
+
+        $stmt = $this->conn->prepare("
+            SELECT balance_check, customer_service
+            FROM carrier_support 
+            WHERE carrier_id = ?
+        ");
+        $stmt->bind_param("i", $carrierId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        return $result ?: [
+            'balance_check' => '*100#',
+            'customer_service' => '1300 000 000'
+        ];
+    }
+
+    private function formatPlanReasoning($reasoning, $planType)
+    {
+        if (!is_array($reasoning)) {
+            return $this->getFallbackExplanation($planType);
+        }
+
+        // Convert bullet points into a cohesive paragraph
+        $explanation = implode(' ', array_map(function ($reason) {
+            return trim($reason, '.');
+        }, $reasoning));
+
+        // Add type-specific context
+        switch ($planType) {
+            case 'recommended':
+                $explanation .= " This plan provides the best balance of features and value for your needs.";
+                break;
+            case 'budget':
+                $explanation .= " While this is our budget option, it still provides reliable service for basic needs.";
+                break;
+            case 'premium':
+                $explanation .= " This premium plan is ideal if you need the absolute best service quality.";
+                break;
+        }
+
+        return $explanation;
+    }
+
+    private function getFallbackExplanation($planType)
+    {
+        switch ($planType) {
+            case 'recommended':
+                return "This plan offers the best balance of coverage and value. It provides reliable service with enough data for your needs while maintaining cost-effectiveness.";
+            case 'budget':
+                return "This budget-friendly option provides essential services at a lower cost. While it may have some limitations, it's suitable for basic usage needs.";
+            case 'premium':
+                return "This premium plan offers the highest level of service with priority network access and additional features. Ideal for users who need the best possible service.";
+            default:
+                return "This plan has been selected based on your specific requirements and usage patterns.";
+        }
+    }
+
+    private function storeAndRedirect($recommendations, $params)
+    {
+        $_SESSION['recommendation_data'] = [
+            'recommendations' => [
+                'recommended' => $recommendations['recommended'] ?? null,
+                'budget' => $recommendations['budget'] ?? null,
+                'premium' => $recommendations['premium'] ?? null,
+                'usage_context' => [
+                    'location' => $params['area'],
+                    'duration' => $params['duration_days'],
+                    'usage_type' => $params['usage_type']
+                ]
+            ],
+            'search_params' => $params
+        ];
+
+        header('Location: ../views/recommendations.php');
+        exit;
+    }
+}
+
+// Initialize and process request
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Log the start of the process
-error_log("Starting recommendation process");
-
-// Get and validate parameters
-$params = [
-    'area' => $_GET['area'] ?? null,
-    'usage_type' => $_GET['usage_type'] ?? null,
-    'duration_days' => $_GET['duration_days'] ?? null
-];
-
-error_log("Raw parameters received: " . print_r($params, true));
-
-// Validate required parameters
-foreach ($params as $key => $value) {
-    if (!$value) {
-        error_log("Missing required parameter: {$key}");
-        $_SESSION['error'] = 'Please fill in all required fields';
-        header('Location: ../index.php');
-        exit;
-    }
-}
-
-// Convert duration to days
-$duration_map = [
-    'short' => 14,  // 2 weeks
-    'medium' => 28, // 4 weeks
-    'long' => 90    // 3 months
-];
-
-$params['duration'] = $duration_map[$params['duration_days']] ?? 28;
-
-// Map usage patterns to data requirements
-$usage_patterns = [
-    'basic' => [
-        'min_data' => 5,
-        'ideal_data' => 10,
-        'description' => 'maps and basic messaging',
-        'activities' => 'Maps, WhatsApp, basic web browsing',
-        'daily_estimate' => '300MB-500MB per day'
-    ],
-    'regular' => [
-        'min_data' => 15,
-        'ideal_data' => 30,
-        'description' => 'social media and video calls',
-        'activities' => 'Instagram, TikTok, daily video calls',
-        'daily_estimate' => '1GB-2GB per day'
-    ],
-    'heavy' => [
-        'min_data' => 35,
-        'ideal_data' => 'Unlimited',
-        'description' => 'streaming and constant connectivity',
-        'activities' => 'Netflix, work calls, hotspot usage',
-        'daily_estimate' => '3GB+ per day'
-    ]
-];
-
-$usage_req = $usage_patterns[$params['usage_type']] ?? $usage_patterns['regular'];
-
-try {
-    // Verify database connection
-    if (!$conn) {
-        throw new Exception("Database connection failed");
-    }
-
-    // Validate area type
-    $valid_areas = ['city', 'eastern', 'western', 'northern', 'southern'];
-    if (!in_array($params['area'], $valid_areas)) {
-        $params['area'] = 'city';
-    }
-
-    // Get base recommendations
-    $recommendations = getRecommendedPlans($conn, $params);
-    error_log("Raw recommendations: " . print_r($recommendations, true));
-
-    if (!$recommendations) {
-        error_log("No recommendations found for params: " . print_r($params, true), 3, "errors.log");
-        $_SESSION['error'] = 'No plans found matching your criteria. Please try different options.';
-        header('Location: ../index.php');
-        exit;
-    }
-
-    // Initialize AI service and get enhanced recommendations
-    try {
-        $aiService = new AiService();
-
-        // Prepare data for AI analysis
-        // Separate the data into planData and userPreferences
-        $planData = $recommendations;  // All the plan data
-        $userPreferences = [
-            'location' => $params['area'],
-            'usage_type' => $params['usage_type'],
-            'duration' => $params['duration_days'],
-            'usage_pattern' => $usage_req
-        ];
-
-        // Get AI-enhanced insights
-        $aiInsights = $aiService->enhanceRecommendations($planData, $userPreferences);
-
-        if ($aiInsights) {
-            $recommendations['ai_insights'] = $aiInsights;
-        }
-    } catch (Exception $e) {
-        error_log("AI Service Error: " . $e->getMessage());
-        // Continue without AI insights if there's an error
-    }
-
-    // Store in session
-    $_SESSION['recommendation_data'] = [
-        'recommendations' => [
-            'recommended' => $recommendations['recommended'],
-            'budget' => $recommendations['budget'],
-            'premium' => isset($recommendations['premium']) ? $recommendations['premium'] : null,
-            'usage_context' => $usage_req,
-            'ai_insights' => $recommendations['ai_insights'] ?? null
-        ],
-        'search_params' => [
-            'area' => $params['area'],
-            'duration_days' => $params['duration'],
-            'usage_type' => $params['usage_type']
-        ]
-    ];
-
-    error_log("Final session data: " . print_r($_SESSION['recommendation_data'], true));
-
-    // Redirect to recommendations view
-    header('Location: ../views/recommendations.php');
-    exit;
-} catch (Exception $e) {
-    error_log("Controller error: " . $e->getMessage(), 3, "errors.log");
-    error_log("Stack trace: " . $e->getTraceAsString(), 3, "errors.log");
-    $_SESSION['error'] = 'An error occurred while processing your request. Please try again.';
-    header('Location: ../index.php');
-    exit;
-}
+$controller = new RecommendationController($conn);
+$controller->processRequest();
