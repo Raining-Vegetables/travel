@@ -61,8 +61,9 @@
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <span class="text-2xl font-bold text-blue-600">SydneyBuddy</span>
-                    <span class="text-sm px-2 py-1 bg-green-100 text-green-700 rounded">Beta</span>
+                    <span class="text-xl sm:text-2xl font-bold text-blue-600">SydneyBuddy</span>
+                    <span class="text-xs sm:text-sm px-2 py-1 bg-green-100 text-green-700 rounded">Beta</span>
+
                 </div>
             </div>
         </div>
@@ -70,13 +71,14 @@
 
     <!-- Hero Section -->
     <div class="bg-gradient-to-b from-blue-50 to-white">
-        <div class="max-w-6xl mx-auto px-4 pt-16 pb-24">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-12 sm:pb-16 lg:pb-24">
+
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <div class="flex-1 space-y-6">
                     <div class="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
                         Step 1: Get Connected
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                         Your Sydney Journey Starts with the Right Connection
                     </h1>
                     <p class="text-xl text-gray-600">
@@ -84,45 +86,37 @@
                     </p>
 
                     <!-- Journey Steps -->
-                    <div class="flex items-center gap-4 pt-4">
+                    <!-- Journey Steps -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4 overflow-x-auto">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
-                            <span class="font-medium">Phone Plan</span>
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shrink-0">1</div>
+                            <span class="font-medium whitespace-nowrap">Phone Plan</span>
                         </div>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="hidden sm:block w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                         <div class="flex items-center gap-2 opacity-50">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold">2</div>
-                            <span class="font-medium">Neighborhood Match</span>
+                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold shrink-0">2</div>
+                            <span class="font-medium whitespace-nowrap">Neighborhood Match</span>
                         </div>
-                        <svg class="w-4 h-4 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="hidden sm:block w-4 h-4 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                         <div class="flex items-center gap-2 opacity-50">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold">3</div>
-                            <span class="font-medium">Local Events</span>
+                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold shrink-0">3</div>
+                            <span class="font-medium whitespace-nowrap">Local Events</span>
                         </div>
                     </div>
 
-                    <!-- Important Notes -->
-                    <div class="bg-amber-50 rounded-lg p-4 mt-6">
-                        <p class="text-sm text-amber-800">
-                            Note: We're an independent information service. We don't sell SIM cards or receive commissions. Our goal is to help you make an informed decision.
-                        </p>
-                    </div>
+
                 </div>
 
                 <div class="flex-1">
-                    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto">
+                    <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 w-full max-w-md mx-auto">
+
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-xl font-semibold">Find Your Phone Plan</h2>
-                            <div class="flex items-center text-sm text-green-600">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Updated Today
-                            </div>
+                            
                         </div>
 
                         <!-- Quick Tips -->
@@ -223,7 +217,8 @@
 
     <!-- Process Preview -->
     <div class="max-w-6xl mx-auto px-4 py-16">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+
             <div class="bg-white rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,7 +249,15 @@
                 <p class="text-gray-600">Coming soon: Discover local events and meet people in your new neighborhood.</p>
             </div>
         </div>
+
+        <!-- Important Notes -->
+        <div class="bg-amber-50 rounded-lg p-4 mt-6">
+            <p class="text-sm text-amber-800">
+                Note: We're an independent information service. We don't sell SIM cards or receive commissions. Our goal is to help you make an informed decision.
+            </p>
+        </div>
     </div>
+
 
     <!-- Footer -->
     <!-- Modern Centered Footer -->
