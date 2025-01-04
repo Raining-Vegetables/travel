@@ -1,20 +1,22 @@
-<?php
-// controllers/RecommendationController.php
-require_once 'config/access-db.php';
-require_once 'config/config.php';
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sydney Tourist Phone Plans - Get Connected with Confidence</title>
+    <title>SydneyBuddy - Get Connected & Find Your Perfect Sydney Spot</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="description"
-        content="Find the perfect Sydney phone plan for tourists. Compare prices, get step-by-step setup guides, and find the nearest store. Save time and money on your Australian phone plan.">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description" content="Start your Sydney journey right! Get connected with the perfect phone plan, find your ideal neighborhood, and connect with local communities. Your first step to feeling at home in Sydney.">
+
+    <!-- Additional Meta Tags -->
+    <meta name="keywords" content="sydney phone plans, sydney neighborhoods, new to sydney, moving to sydney, sydney communities">
+
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -58,13 +60,10 @@ require_once 'config/config.php';
     <nav class="bg-white border-b">
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center">
+                <div class="flex items-center gap-2">
                     <span class="text-2xl font-bold text-blue-600">SydneyBuddy</span>
+                    <span class="text-sm px-2 py-1 bg-green-100 text-green-700 rounded">Beta</span>
                 </div>
-                <!-- <div class="flex space-x-4 text-sm">
-                    <a href="#how-it-works" class="text-gray-600 hover:text-gray-900">How It Works</a>
-                    <a href="#contact" class="text-gray-600 hover:text-gray-900">Contact</a>
-                </div> -->
             </div>
         </div>
     </nav>
@@ -75,66 +74,81 @@ require_once 'config/config.php';
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <div class="flex-1 space-y-6">
                     <div class="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
-                        New: Sydney's Local Phone Plan Finder
+                        Step 1: Get Connected
                     </div>
                     <h1 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                        Get Connected in Sydney Without The Hassle
+                        Your Sydney Journey Starts with the Right Connection
                     </h1>
                     <p class="text-xl text-gray-600">
-                        We research and compare Sydney phone plans from all major carriers, providing clear prices and
-                        step-by-step pickup instructions for tourists.
+                        Find your perfect phone plan, discover your ideal neighborhood, and connect with local communities. Let's start with getting you connected!
                     </p>
+
+                    <!-- Journey Steps -->
+                    <div class="flex items-center gap-4 pt-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
+                            <span class="font-medium">Phone Plan</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <div class="flex items-center gap-2 opacity-50">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold">2</div>
+                            <span class="font-medium">Neighborhood Match</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <div class="flex items-center gap-2 opacity-50">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold">3</div>
+                            <span class="font-medium">Local Events</span>
+                        </div>
+                    </div>
+
+                    <!-- Important Notes -->
+                    <div class="bg-amber-50 rounded-lg p-4 mt-6">
+                        <p class="text-sm text-amber-800">
+                            Note: We're an independent information service. We don't sell SIM cards or receive commissions. Our goal is to help you make an informed decision.
+                        </p>
+                    </div>
                 </div>
+
                 <div class="flex-1">
                     <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto">
                         <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-xl font-semibold">Find Your Perfect Plan</h2>
+                            <h2 class="text-xl font-semibold">Find Your Phone Plan</h2>
                             <div class="flex items-center text-sm text-green-600">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 Updated Today
                             </div>
                         </div>
 
-                        <!-- Pre-requirements Notice -->
+                        <!-- Quick Tips -->
                         <div class="mb-6 p-4 bg-blue-50 rounded-lg">
-                            <h3 class="text-sm font-semibold text-blue-800 mb-2">Before you start:</h3>
+                            <h3 class="text-sm font-semibold text-blue-800 mb-2">Quick Setup Tips:</h3>
                             <ul class="text-sm text-blue-700 space-y-1">
                                 <li class="flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Make sure your phone is unlocked
+                                    Easy setup in multiple languages
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Have your passport ready for purchase
+                                    Bring ID (passport or license)
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Plans can be picked up same-day
+                                    Works across all of Sydney
                                 </li>
                             </ul>
                         </div>
-
-                        <?php if (isset($_SESSION['error'])): ?>
-                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                                <?php
-                                echo htmlspecialchars($_SESSION['error']);
-                                unset($_SESSION['error']);
-                                ?>
-                            </div>
-                        <?php endif; ?>
-
 
                         <form action="controllers/RecommendationController.php" method="GET" class="space-y-8" id="planFinderForm">
 
@@ -196,54 +210,53 @@ require_once 'config/config.php';
                                 Show My Recommendations
                             </button>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Trust Sections -->
-    <div class="max-w-6xl mx-auto px-4 py-16">
-        <!-- Trust Badges -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div class="bg-white rounded-xl p-6 shadow-sm">
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold mb-2">Clear Step-by-Step Guide</h3>
-                <p class="text-gray-600">We provide detailed instructions for buying and setting up your SIM card.</p>
-            </div>
 
+
+
+
+    <!-- Process Preview -->
+    <div class="max-w-6xl mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Store Finder</h3>
-                <p class="text-gray-600">Find the closest carrier store to your accommodation with exact directions.</p>
+                <h3 class="text-lg font-semibold mb-2">1. Get Connected</h3>
+                <p class="text-gray-600">Find a phone plan that matches your needs and budget. Get honest insights and directions to sores.</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 9a2 2 0 11-4 0 2 2 0 014 0zm6 8a2 2 0 11-4 0 2 2 0 014 0zM7 17a2 2 0 11-4 0 2 2 0 014 0z">
-                        </path>
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Compare All Options</h3>
-                <p class="text-gray-600">See current prices and plans from every major carrier in Sydney.</p>
+                <h3 class="text-lg font-semibold mb-2">2. Find Your Area</h3>
+                <p class="text-gray-600">Coming soon: Get matched with Sydney neighborhoods that fit your lifestyle and preferences.</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">3. Join the Community</h3>
+                <p class="text-gray-600">Coming soon: Discover local events and meet people in your new neighborhood.</p>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <!-- Modern Centered Footer -->
     <footer class="bg-white border-t">
         <div class="max-w-6xl mx-auto px-4 py-12">
@@ -251,7 +264,7 @@ require_once 'config/config.php';
             <div class="text-center mb-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-4">SydneyBuddy</h3>
                 <p class="text-gray-600 max-w-md mx-auto">
-                    Helping tourists find the best phone plans in Sydney with clear, unbiased recommendations.
+                    Making it easier to get started and feel at home in Sydney.
                 </p>
             </div>
 
@@ -273,65 +286,6 @@ require_once 'config/config.php';
             </div>
         </div>
     </footer>
-
-    <script>
-        // Enhanced form submission tracking
-        document.getElementById('planFinderForm').addEventListener('submit', function(e) {
-            const usage = document.getElementById('usage').value;
-            const location = document.getElementById('location').value;
-            const duration = document.getElementById('duration').value;
-
-            gtag('event', 'form_submission', {
-                'event_category': 'engagement',
-                'event_label': `${usage}_${location}_${duration}`,
-                'usage_type': usage,
-                'location_selected': location,
-                'duration_selected': duration
-            });
-
-            // Track as a conversion
-            gtag('event', 'conversion', {
-                'send_to': 'G-T8TD7ZWF6Q',
-                'event_category': 'form',
-                'event_label': 'plan_finder_submission'
-            });
-        });
-
-        // Track location help clicks
-        document.querySelector('button[onclick]').addEventListener('click', function() {
-            gtag('event', 'location_help_click', {
-                'event_category': 'engagement',
-                'event_label': 'location_guide',
-                'non_interaction': false
-            });
-        });
-
-        // Track dropdown selections
-        ['usage', 'location', 'duration'].forEach(fieldId => {
-            document.getElementById(fieldId).addEventListener('change', function(e) {
-                gtag('event', 'field_selection', {
-                    'event_category': 'form_interaction',
-                    'event_label': fieldId,
-                    'field_value': e.target.value
-                });
-            });
-        });
-
-
-        // Track time spent on page
-        let startTime = new Date();
-        window.addEventListener('beforeunload', function() {
-            const endTime = new Date();
-            const timeSpent = Math.round((endTime - startTime) / 1000);
-
-            gtag('event', 'time_spent', {
-                'event_category': 'engagement',
-                'event_label': 'page_time',
-                'value': timeSpent
-            });
-        });
-    </script>
-
 </body>
 
 </html>
