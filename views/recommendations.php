@@ -214,13 +214,25 @@ function formatDataUsage($data_amount)
 
                     <!-- How to Get This Plan Section -->
                     <?php if (!empty($plan['stores'])): ?>
+
                         <button
                             onclick="toggleInstructions('<?php echo $key; ?>')"
-                            class="w-full px-6 py-3 flex items-center justify-between border-b hover:bg-gray-50"
+                            class="w-full px-6 py-4 flex items-center justify-between 
+           bg-blue-50 border-2 border-blue-200 
+           hover:bg-blue-100 hover:border-blue-300
+           transition-all duration-200"
                             data-instructions="<?php echo $key; ?>">
-                            <span class="font-medium">How to Get This Plan</span>
-                            <svg class="w-5 h-5 text-gray-400 transform transition-transform instructions-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="font-medium text-blue-700">How to Get This Plan</span>
+                            </div>
+                            <svg class="w-5 h-5 text-blue-500 transform transition-transform instructions-arrow"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
 

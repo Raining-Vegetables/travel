@@ -4,17 +4,22 @@
 require_once __DIR__ . '/../config/access-db.php';
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../services/AiService.php';
+require_once __DIR__ . '/../models/PlanModel.php';
+
 
 class RecommendationController
 {
     private $conn;
     private $aiService;
+    private $planModel;
 
     public function __construct($conn)
     {
         $this->conn = $conn;
         $this->aiService = new AiService();
+        $this->planModel = new PlanModel($conn);
     }
+
 
     public function processRequest()
     {
@@ -67,7 +72,7 @@ class RecommendationController
 
     private function enrichRecommendations($aiRecommendations, $params)
     {
-        error_log("Starting enrichment process", 3, "errors.log");
+
         $enriched = [];
 
         foreach (['recommended', 'budget', 'premium'] as $type) {
@@ -79,9 +84,9 @@ class RecommendationController
                     // Start with the AI recommendation data
                     $enriched[$type] = $plan;
 
-                    // Add required fields that the view expects
+                    // Add basic fields
                     $enriched[$type]['carrier_name'] = $plan['carrier'];
-                    $enriched[$type]['plan_explanation'] = $this->formatPlanReasoning($plan['reasoning'], $type); // Add this line
+                    $enriched[$type]['plan_explanation'] = $this->formatPlanReasoning($plan['reasoning'], $type);
                     $enriched[$type]['features'] = [
                         "No Lock-in Contract",
                         "Instant Activation",
@@ -89,38 +94,11 @@ class RecommendationController
                         "Australian Mobile Number"
                     ];
 
-                    // Try to get additional data from database
-                    try {
-                        $carrierId = $this->getCarrierId($plan['carrier']);
-                        if ($carrierId) {
-                            $coverageDetails = $this->getCoverageDetails($carrierId, $params['area']);
-                            $stores = $this->getNearbyStores($carrierId, $params['area']);
-                            $honestInsights = $this->getHonestInsights($carrierId, $params['area']);
+                    // Use PlanModel to enrich the data
+                    $enrichedPlan = $this->planModel->enrichPlanData($enriched[$type], $params['area']);
 
-                            // Add database info if available
-                            $enriched[$type] = array_merge($enriched[$type], [
-                                'stores' => $stores,
-                                'data_speed_min' => $coverageDetails['data_speed_min'] ?? 25,
-                                'data_speed_max' => $coverageDetails['data_speed_max'] ?? 100,
-                                'coverage_rating' => $coverageDetails['rating'] ?? 4.0,
-                                'honest_insights' => $honestInsights,
-                                'support_info' => $this->getSupportInfo($carrierId)
-                            ]);
-                        }
-                    } catch (Exception $e) {
-                        error_log("Database enrichment failed for $type plan: " . $e->getMessage(), 3, "errors.log");
-                        // Add fallback values if database operations fail
-                        $enriched[$type] = array_merge($enriched[$type], [
-                            'stores' => [],
-                            'data_speed_min' => 25,
-                            'data_speed_max' => 100,
-                            'coverage_rating' => 4.0,
-                            'honest_insights' => [],
-                            'support_info' => [
-                                'balance_check' => '*100#',
-                                'customer_service' => '1300 000 000'
-                            ]
-                        ]);
+                    if ($enrichedPlan) {
+                        $enriched[$type] = $enrichedPlan;
                     }
                 } catch (Exception $e) {
                     error_log("Error enriching $type plan: " . $e->getMessage(), 3, "errors.log");
@@ -128,80 +106,12 @@ class RecommendationController
             }
         }
 
+        error_log("Plan before enrichment: " . print_r($plan, true), 3, "errors.log");
+        error_log("Enriched plan: " . print_r($enriched[$type], true), 3, "errors.log");
+
         return $enriched;
     }
 
-    private function getCarrierId($carrierName)
-    {
-        $stmt = $this->conn->prepare("SELECT id FROM carriers WHERE LOWER(name) LIKE LOWER(?)");
-        $carrierPattern = '%' . $carrierName . '%';
-        $stmt->bind_param("s", $carrierPattern);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $carrier = $result->fetch_assoc();
-        return $carrier ? $carrier['id'] : null;
-    }
-
-    private function getCoverageDetails($carrierId, $area)
-    {
-        $stmt = $this->conn->prepare("
-            SELECT rating, data_speed_min, data_speed_max
-            FROM coverage 
-            WHERE carrier_id = ? AND area_type = ?
-        ");
-        $stmt->bind_param("is", $carrierId, $area);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
-    }
-
-    private function getNearbyStores($carrierId, $area)
-    {
-        $stmt = $this->conn->prepare("
-            SELECT * FROM stores 
-            WHERE carrier_id = ? AND area_type = ? AND status = 'active'
-            LIMIT 2
-        ");
-        $stmt->bind_param("is", $carrierId, $area);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
-
-    private function getHonestInsights($carrierId, $area)
-    {
-        $stmt = $this->conn->prepare("
-            SELECT insight_type, marketing_claim, reality, recommendation
-            FROM honest_insights 
-            WHERE carrier_id = ? AND area_type = ?
-            LIMIT 2
-        ");
-        $stmt->bind_param("is", $carrierId, $area);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
-
-    private function getSupportInfo($carrierId)
-    {
-        if (!$carrierId) {
-            return [
-                'balance_check' => '*100#',
-                'customer_service' => '1300 000 000'
-            ];
-        }
-
-        $stmt = $this->conn->prepare("
-            SELECT balance_check, customer_service
-            FROM carrier_support 
-            WHERE carrier_id = ?
-        ");
-        $stmt->bind_param("i", $carrierId);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-
-        return $result ?: [
-            'balance_check' => '*100#',
-            'customer_service' => '1300 000 000'
-        ];
-    }
 
     private function formatPlanReasoning($reasoning, $planType)
     {
