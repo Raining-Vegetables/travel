@@ -95,9 +95,11 @@
                         <svg class="hidden sm:block w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
-                        <div class="flex items-center gap-2 opacity-50">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold shrink-0">2</div>
-                            <span class="font-medium whitespace-nowrap">Neighborhood Match</span>
+                        <div class="flex items-center gap-2">
+                            <a href="#neighborhood-form" class="flex items-center gap-2 hover:text-blue-600">
+                                <div class="w-8 h-8 rounded-full bg-gray-200 hover:bg-blue-600 hover:text-white text-gray-600 flex items-center justify-center font-bold shrink-0">2</div>
+                                <span class="font-medium whitespace-nowrap">Find Your Neighborhood</span>
+                            </a>
                         </div>
                         <svg class="hidden sm:block w-4 h-4 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -116,7 +118,7 @@
 
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-xl font-semibold">Find Your Phone Plan</h2>
-                            
+
                         </div>
 
                         <!-- Quick Tips -->

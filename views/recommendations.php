@@ -489,6 +489,18 @@ function formatDataUsage($data_amount)
                 </tbody>
             </table>
         </div>
+        <!-- Add this right before your feedback section -->
+        <div class="text-center py-8 border-t">
+            <p class="text-gray-600 mb-3">Ready for your next step in Sydney?</p>
+            <a
+                href="neighborhood-match.php"
+                class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700">
+                Find Your Perfect Neighborhood
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
 
         <!-- Feedback Section -->
         <div class="mt-8 text-center">
