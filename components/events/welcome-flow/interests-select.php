@@ -150,8 +150,8 @@
 
     function saveInterests() {
         if (selectedInterests.size > 0 || selectedNewcomerEvents.size > 0) {
-            localStorage.setItem('interests', JSON.stringify([...selectedInterests]));
-            localStorage.setItem('newcomer-events', JSON.stringify([...selectedNewcomerEvents]));
+            document.cookie = `interests=${JSON.stringify([...selectedInterests])}; path=/`;
+            document.cookie = `newcomer-events=${JSON.stringify([...selectedNewcomerEvents])}; path=/`;
             window.location.href = 'index.php?page=location';
         }
     }

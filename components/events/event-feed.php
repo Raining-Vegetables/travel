@@ -1,6 +1,59 @@
 <?php
-// components/events/feed.php
+require_once __DIR__ . '/../../helpers/ticketmaster.php';
+require_once __DIR__ . '/../../helpers/meetup.php';
+require_once __DIR__ . '/../../helpers/event-matcher.php';
+
+// Initialize arrays
+$tmEvents = [];
+$muEvents = [];
+$allEvents = [];
+
+try {
+    // Initialize APIs and EventMatcher
+    $ticketmaster = new TicketmasterAPI('sU3NDmUv2qoBuD76gzrY5ZJ2S8m6GToz');
+    $meetup = new MeetupAPI();
+    $matcher = new EventMatcher();
+
+    // Get base preferences for API calls
+    $basePreferences = [
+        'startDate' => isset($_COOKIE['arrival-date']) ? $_COOKIE['arrival-date'] : date('Y-m-d')
+    ];
+
+    // Get Ticketmaster events
+    $eventsResponse = $ticketmaster->getEvents($basePreferences);
+    if (isset($eventsResponse['_embedded']['events'])) {
+        foreach ($eventsResponse['_embedded']['events'] as $event) {
+            $formattedEvent = $ticketmaster->formatEvent($event);
+            $formattedEvent['source'] = 'ticketmaster';
+            $tmEvents[] = $formattedEvent;
+        }
+    }
+
+    // Get Meetup events
+    $muResponse = $meetup->getEvents($basePreferences);
+    if (isset($muResponse['events'])) {
+        foreach ($muResponse['events'] as $event) {
+            $formattedEvent = $meetup->formatEvent($event);
+            if ($formattedEvent !== null) {
+                $formattedEvent['source'] = 'meetup';
+                $muEvents[] = $formattedEvent;
+            }
+        }
+    }
+
+    // Merge all events
+    $allEvents = array_merge($tmEvents, $muEvents);
+
+    // Apply preference-based filtering and sorting
+    $allEvents = $matcher->filterEvents($allEvents);
+} catch (Exception $e) {
+    error_log('Error in feed: ' . $e->getMessage());
+    $allEvents = [];
+}
+
 ?>
+
+
 
 <div class="min-h-screen bg-gradient-to-b from-gray-900 to-black">
     <!-- Top Navigation -->
@@ -9,7 +62,7 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
                     <span class="text-xl font-bold text-white">sydney</span>
-                    <span class="text-sm px-2 py-1 bg-blue-500/20 text-blue-400 rounded">mate</span>
+                    <span class="text-sm px-2 py-1 bg-blue-500/20 text-blue-400 rounded">buddy</span>
                 </div>
                 <div class="flex items-center gap-4">
                     <button class="p-2 text-white/70 hover:text-white">
@@ -23,115 +76,70 @@
         </div>
     </div>
 
+
+    <!-- Main Content -->
     <!-- Main Content -->
     <div class="max-w-2xl mx-auto px-4 py-6">
         <!-- Welcome Section -->
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-white mb-2">Hey <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'Mate'); ?> 👋</h1>
-            <p class="text-white/70">Ready to explore Sydney today?</p>
+            <h1 class="text-2xl font-bold text-white mb-2">Hey <?php echo htmlspecialchars($_COOKIE['user_name'] ?? 'Mate'); ?> 👋</h1>
+            <p class="text-white/70">Here's what's happening in Sydney</p>
         </div>
 
-        <!-- Search Bar -->
-        <div class="relative mb-8">
-            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40"></i>
-            <input
-                type="text"
-                placeholder="Search events, activities, places..."
-                class="w-full bg-white/10 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:border-blue-500">
-        </div>
+        <!-- Events List -->
+        <div class="space-y-6">
+            <?php if (empty($allEvents)): ?>
+                <div class="text-center py-12">
+                    <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="calendar" class="w-8 h-8 text-white/40"></i>
+                    </div>
+                    <h3 class="text-white font-medium mb-2">No events found</h3>
+                    <p class="text-white/60">Try adjusting your preferences or check back later</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($allEvents as $event): ?>
+                    <div class="bg-white/10 rounded-xl overflow-hidden backdrop-blur-lg">
+                        <?php if (isset($event['image']) && $event['image']): ?>
+                            <div class="aspect-w-16 aspect-h-9 relative">
+                                <img
+                                    src="<?php echo htmlspecialchars($event['image']); ?>"
+                                    class="w-full h-48 object-cover object-center"
+                                    loading="lazy"
+                                    alt="<?php echo htmlspecialchars($event['name']); ?>"
+                                    onerror="this.onerror=null; this.src='/api/placeholder/800/450';" />
+                            </div>
+                        <?php endif; ?>
 
-        <!-- For You Section -->
-        <div class="mb-12">
-            <h2 class="text-lg font-semibold text-white mb-4">For You</h2>
-            <div class="flex gap-4 overflow-x-auto pb-4">
-                <?php
-                $quickAccess = [
-                    ['icon' => 'coffee', 'text' => 'Coffee Club', 'gradient' => 'from-blue-500/20 to-purple-500/20'],
-                    ['icon' => 'compass', 'text' => 'Adventures', 'gradient' => 'from-orange-500/20 to-red-500/20'],
-                    ['icon' => 'book', 'text' => 'Learning', 'gradient' => 'from-green-500/20 to-emerald-500/20'],
-                    ['icon' => 'music', 'text' => 'Concerts', 'gradient' => 'from-pink-500/20 to-rose-500/20'],
-                ];
-
-                foreach ($quickAccess as $item): ?>
-                    <div class="flex-shrink-0 w-32 bg-gradient-to-br <?php echo $item['gradient']; ?> rounded-xl p-4 border border-white/10">
-                        <i data-lucide="<?php echo $item['icon']; ?>" class="w-6 h-6 text-white mb-2"></i>
-                        <span class="text-white text-sm"><?php echo $item['text']; ?></span>
+                        <div class="p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="inline-block px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-sm">
+                                    <?php echo htmlspecialchars($event['type']); ?>
+                                </span>
+                                <span class="text-sm px-2 py-1 bg-white/10 rounded text-white/60">
+                                    via <?php echo ucfirst(htmlspecialchars($event['source'])); ?>
+                                </span>
+                            </div>
+                            <h3 class="text-white font-semibold mb-1"><?php echo htmlspecialchars($event['name']); ?></h3>
+                            <p class="text-white/70 text-sm mb-2">
+                                <?php echo htmlspecialchars($event['date']); ?> •
+                                <?php echo htmlspecialchars($event['time']); ?> •
+                                <?php echo htmlspecialchars($event['venue']); ?>
+                            </p>
+                            <?php if (isset($event['description'])): ?>
+                                <p class="text-white/60 text-sm mb-3"><?php echo htmlspecialchars($event['description']); ?></p>
+                            <?php endif; ?>
+                            <div class="flex items-center justify-between">
+                                <span class="text-white/60 text-sm"><?php echo htmlspecialchars($event['priceRange']); ?></span>
+                                <a href="<?php echo htmlspecialchars($event['url']); ?>"
+                                    target="_blank"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm transition-colors">
+                                    Get Tickets
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-        </div>
-
-        <!-- This Weekend Section -->
-        <div class="mb-12">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-white">This Weekend</h2>
-                <button class="text-blue-400 text-sm">View all</button>
-            </div>
-
-            <div class="bg-white/10 rounded-xl overflow-hidden backdrop-blur-lg">
-                <img src="path/to/event-image.jpg" class="w-full h-36 object-cover" alt="Event">
-                <div class="p-4">
-                    <span class="inline-block px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-sm mb-2">
-                        Featured Event
-                    </span>
-                    <h3 class="text-white font-semibold mb-1">Korean Street Food Festival</h3>
-                    <p class="text-white/70 text-sm mb-3">This Saturday • Darling Square</p>
-                    <div class="flex items-center gap-4">
-                        <button class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white text-sm transition-colors">
-                            Join Event
-                        </button>
-                        <button class="p-2 rounded-lg border border-white/10 hover:bg-white/5">
-                            <i data-lucide="heart" class="w-5 h-5 text-white"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Your Calendar -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-white">Your Calendar</h2>
-                <button class="text-blue-400 text-sm">View all</button>
-            </div>
-
-            <?php
-            $calendarEvents = [
-                [
-                    'day' => 'SAT',
-                    'date' => '15',
-                    'title' => 'Sunset Beach Yoga',
-                    'time' => '5:30 PM',
-                    'location' => 'Bondi Beach',
-                    'color' => 'purple'
-                ],
-                [
-                    'day' => 'SUN',
-                    'date' => '16',
-                    'title' => 'Coffee Club Meetup',
-                    'time' => '10:00 AM',
-                    'location' => 'The Grounds',
-                    'color' => 'blue'
-                ]
-            ];
-
-            foreach ($calendarEvents as $event): ?>
-                <div class="bg-white/10 rounded-xl p-4 backdrop-blur-lg mb-3">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 bg-<?php echo $event['color']; ?>-500/20 rounded-lg flex flex-col items-center justify-center">
-                            <span class="text-<?php echo $event['color']; ?>-400 text-sm"><?php echo $event['day']; ?></span>
-                            <span class="text-white font-bold"><?php echo $event['date']; ?></span>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-white font-medium mb-1"><?php echo $event['title']; ?></h3>
-                            <p class="text-white/60 text-sm"><?php echo $event['time']; ?> • <?php echo $event['location']; ?></p>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-<?php echo $event['color']; ?>-400 rounded-full"></span>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -141,18 +149,29 @@
             <div class="flex justify-around py-4">
                 <?php
                 $navItems = [
-                    ['icon' => 'home', 'label' => 'Home', 'active' => true],
+                    ['icon' => 'home', 'label' => 'Home', 'page' => 'events', 'active' => true],
                     ['icon' => 'compass', 'label' => 'Explore', 'active' => false],
-                    ['icon' => 'calendar', 'label' => 'Calendar', 'active' => false],
-                    ['icon' => 'user', 'label' => 'Profile', 'active' => false],
+                    ['icon' => 'info', 'label' => 'New in Town', 'page' => 'new-in-town', 'active' => true],
+                    ['icon' => 'user', 'label' => 'Profile', 'active' => false]
                 ];
 
-                foreach ($navItems as $item): ?>
-                    <button class="flex flex-col items-center gap-1 <?php echo $item['active'] ? 'text-white' : 'text-white/40'; ?>">
-                        <i data-lucide="<?php echo $item['icon']; ?>" class="w-6 h-6"></i>
-                        <span class="text-xs"><?php echo $item['label']; ?></span>
-                    </button>
-                <?php endforeach; ?>
+                $currentPage = $_GET['page'] ?? 'events';
+
+                foreach ($navItems as $item):
+                    if ($item['active']): ?>
+                        <a
+                            href="index.php?page=<?php echo $item['page']; ?>"
+                            class="flex flex-col items-center gap-1 <?php echo $currentPage === $item['page'] ? 'text-white' : 'text-white/40'; ?>">
+                            <i data-lucide="<?php echo $item['icon']; ?>" class="w-6 h-6"></i>
+                            <span class="text-xs"><?php echo $item['label']; ?></span>
+                        </a>
+                    <?php else: ?>
+                        <button class="flex flex-col items-center gap-1 text-white/40 cursor-not-allowed">
+                            <i data-lucide="<?php echo $item['icon']; ?>" class="w-6 h-6"></i>
+                            <span class="text-xs"><?php echo $item['label']; ?></span>
+                        </button>
+                <?php endif;
+                endforeach; ?>
             </div>
         </div>
     </div>

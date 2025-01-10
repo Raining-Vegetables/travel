@@ -34,6 +34,52 @@ session_start();
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
+        .event-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
+            background: rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .event-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .event-image.contain {
+            object-fit: contain;
+        }
+
+        /* Add a subtle gradient overlay */
+        .event-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.1) 100%);
+            pointer-events: none;
+        }
+
+        /* Fallback for when image fails to load */
+        .event-image-fallback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -53,7 +99,8 @@ session_start();
             'duration' => 'components/events/welcome-flow/duration-select.php',
             'interests' => 'components/events/welcome-flow/interests-select.php',
             'location' => 'components/events/welcome-flow/location-select.php',
-            'events' => 'components/events/event-feed.php'
+            'events' => 'components/events/event-feed.php',
+            'new-in-town' => 'components/events/new-in-town.php'  // Add this line
         ];
 
         if (isset($validPages[$page])) {
